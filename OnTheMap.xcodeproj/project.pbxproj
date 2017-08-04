@@ -15,6 +15,7 @@
 		E94C15701F337A420076BCD6 /* OnTheMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94C156F1F337A420076BCD6 /* OnTheMapTests.swift */; };
 		E94C157B1F337A420076BCD6 /* OnTheMapUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94C157A1F337A420076BCD6 /* OnTheMapUITests.swift */; };
 		E94C158A1F347A680076BCD6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94C15891F347A680076BCD6 /* AppDelegate.swift */; };
+		E94C158D1F3481250076BCD6 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94C158C1F3481250076BCD6 /* LoginViewController.swift */; };
 		F69183A4C127BEB6D80DA198 /* Pods_OnTheMapUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BA297F1B60CF7CDCF02CFF8 /* Pods_OnTheMapUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +59,7 @@
 		E94C157C1F337A420076BCD6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E94C15881F347A680076BCD6 /* OnTheMap-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OnTheMap-Bridging-Header.h"; sourceTree = "<group>"; };
 		E94C15891F347A680076BCD6 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = src/AppDelegate.swift; sourceTree = "<group>"; };
+		E94C158C1F3481250076BCD6 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = src/LoginViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +143,7 @@
 				E94C15881F347A680076BCD6 /* OnTheMap-Bridging-Header.h */,
 				E94C158B1F347A850076BCD6 /* Storyboards */,
 				E94C15891F347A680076BCD6 /* AppDelegate.swift */,
+				E94C158C1F3481250076BCD6 /* LoginViewController.swift */,
 			);
 			path = OnTheMap;
 			sourceTree = "<group>";
@@ -457,6 +460,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E94C158D1F3481250076BCD6 /* LoginViewController.swift in Sources */,
 				E94C158A1F347A680076BCD6 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
