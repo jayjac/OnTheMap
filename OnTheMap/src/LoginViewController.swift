@@ -9,12 +9,34 @@
 import UIKit
 import FacebookLogin
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, UdacitySessionDelegate {
 
+    @IBOutlet weak var usernameTextField: UITextField!
+    @IBOutlet weak var passwordTextField: UITextField!
+
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        testUdacityParse()
+        getStudentLocation()
+        //testUdacityParse()
     }
+    
+    
+    func sessionReturnedError(_ error: Error) {
+        
+    }
+    
+    func sessionWasAccepted(_ response: String) {
+        
+    }
+    
+    @IBAction func logInWasTapped(_ sender: Any) {
+        guard let username = usernameTextField.text, let password = passwordTextField.text, !username.isEmpty, !password.isEmpty else { return }
+        
+        NetworkHandler.shared.requestSession(for: username, with: password, notify: self)
+    }
+    
     
     func testUdacityParse() {
         let url = URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!
@@ -42,6 +64,10 @@ class LoginViewController: UIViewController {
         task.resume()
     }
 
+    @IBAction func createAnAccountButtonWasTapped(_ sender: Any) {
+        let signupURL = URL(string: "https://www.udacity.com/account/auth#!/signup")!
+        UIApplication.shared.openURL(signupURL)
+    }
     
     @IBAction func facebookLogin(_ sender: Any) {
         let loginManager = LoginManager()
@@ -62,6 +88,21 @@ class LoginViewController: UIViewController {
         }
         
     }
+    
+
+    func getStudentLocation() {
+        let components = NSURLComponents(string: "https://parse.udacity.com/parse/classes/StudentLocation")!
+        let jsonObject = ["uniqueKey": "myUniqueKeyRightHereYall"]
+        let jsonData = try! JSONSerialization.data(withJSONObject: jsonObject, options: [])
+        let jsonString = String(data: jsonData, encoding: .utf8)!
+        let queryItem = URLQueryItem(name: "where", value: jsonString)
+        components.queryItems = [queryItem]
+        print(components.url!.absoluteString)
+    }
+    
+    
+    
+    
 
 
 
