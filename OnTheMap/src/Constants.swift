@@ -18,4 +18,5 @@ struct UdacityAPI {
     static let xRestAPIHeader = "X-Parse-REST-API-Key"
     static let endPoint = URL(string: "https://parse.udacity.com/parse")!
     static let sessionURL = URL(string: "https://www.udacity.com/api/session")!
+    static let studentLocationURL = URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!
 }

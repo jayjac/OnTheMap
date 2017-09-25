@@ -17,7 +17,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        _ = UdacityAPI.endPoint
         return SDKApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
