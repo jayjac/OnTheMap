@@ -19,4 +19,5 @@ struct UdacityAPI {
     static let endPoint = URL(string: "https://parse.udacity.com/parse")!
     static let sessionURL = URL(string: "https://www.udacity.com/api/session")!
     static let studentLocationURL = URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!
+    static let udacitySignupURL = URL(string: "https://www.udacity.com/account/auth#!/signup")!
 }

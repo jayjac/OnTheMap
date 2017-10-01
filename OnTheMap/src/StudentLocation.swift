@@ -8,16 +8,28 @@
 
 import Foundation
 import CoreLocation
+import MapKit
 
-struct StudentLocation {
+class StudentLocation: NSObject, MKAnnotation {
     let objectId: String
     let uniqueKey: String?
     let firstName: String?
     let lastName: String?
     let mapString: String?
     let mediaURL: URL?
-    let coordinate: CLLocation?
+    let coordinate: CLLocationCoordinate2D
     let updatedAt: Date?
+    
+    init(objectId: String, uniqueKey: String?, firstName: String?, lastName: String?, mapString: String?, mediaURL: URL?, coordinate: CLLocationCoordinate2D, updatedAt: Date?) {
+        self.objectId = objectId
+        self.uniqueKey = uniqueKey
+        self.firstName = firstName
+        self.lastName = lastName
+        self.mapString = mapString
+        self.mediaURL = mediaURL
+        self.coordinate = coordinate
+        self.updatedAt = updatedAt
+    }
 }
 
 

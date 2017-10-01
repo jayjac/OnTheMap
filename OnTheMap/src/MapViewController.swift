@@ -10,39 +10,52 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class MapViewController: UIViewController, MKMapViewDelegate {
+class MapViewController: UIViewController, MKMapViewDelegate, StudentLocationDelegate {
 
     @IBOutlet weak var mapView: MKMapView!
+    private var studentLocations: [StudentLocation]?
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        mapView.delegate = self
-        
         let center = CLLocationCoordinate2D(latitude: 48.8886976, longitude: 2.4065027)
-        let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+        let span = MKCoordinateSpan(latitudeDelta: 50.0, longitudeDelta: 50.0)
         let region = MKCoordinateRegion(center: center, span: span)
         mapView.region = region
         
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = center
-        annotation.title = "Home"
-        annotation.subtitle = "59 rue Gutenberg"
-        mapView.addAnnotation(annotation)
-        
-        
+        mapView.delegate = self
+        LocationManager.default.retrieveStudentLocations(andNotify: self)
     }
 
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        let annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "CustomAnnotation")
-        let leftCalloutView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
-        leftCalloutView.backgroundColor = UIColor.blue
-        let rightCalloutView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
-        rightCalloutView.backgroundColor = UIColor.brown
-        annotationView.leftCalloutAccessoryView = leftCalloutView
-        annotationView.rightCalloutAccessoryView = rightCalloutView
-        return annotationView
+        if let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "pin") {
+            annotationView.annotation = annotation
+            return annotationView
+        }
+        else {
+            let annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "pin")
+            annotationView.isEnabled = true
+            annotationView.image = UIImage(named: "student")
+            return annotationView
+        }
+    }
+    
+    
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        print("selected annotation view")
+    }
+    
+    
+    func studentLocation(failedToRetrieveLocations error: NSError) {
+        let alertVC = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertVC.addAction(action)
+        present(alertVC, animated: true, completion: nil)
+    }
+    
+    func studentLocation(didRetrieveLocations locations: [StudentLocation]) {
+        self.studentLocations = locations
+        mapView.addAnnotations(locations)
     }
 
 }
