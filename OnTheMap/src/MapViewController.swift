@@ -10,6 +10,11 @@ import UIKit
 import MapKit
 import CoreLocation
 
+enum AnnotationState {
+    case normal
+    case focused
+}
+
 class MapViewController: UIViewController, MKMapViewDelegate, StudentLocationDelegate {
 
     @IBOutlet weak var mapView: MKMapView!
@@ -33,16 +38,39 @@ class MapViewController: UIViewController, MKMapViewDelegate, StudentLocationDel
             return annotationView
         }
         else {
-            let annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "pin")
-            annotationView.isEnabled = true
-            annotationView.image = UIImage(named: "student")
-            return annotationView
+            let nib = UINib(nibName: "StudentAnnotationView", bundle: nil)
+            guard let studentAnnotationView = nib.instantiate(withOwner: nil, options: nil)[0] as? StudentAnnotationView else { return nil }
+            studentAnnotationView.annotation = annotation
+            studentAnnotationView.isEnabled = true
+            return studentAnnotationView
         }
     }
     
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        print("selected annotation view")
+        self.animateAnnotation(view, to: .focused)
+        guard let studentAnnotationView = view as? StudentAnnotationView else { return }
+        studentAnnotationView.calloutView.isHidden = false
+    }
+    
+    func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
+        self.animateAnnotation(view, to: .normal)
+        guard let studentAnnotationView = view as? StudentAnnotationView else { return }
+        studentAnnotationView.calloutView.isHidden = true
+    }
+    
+    private func animateAnnotation(_ view: UIView, to state: AnnotationState) {
+        let scale: CGFloat
+        switch state {
+        case .normal:
+            scale = 1.0
+            
+        case .focused:
+            scale = 1.6
+        }
+        UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1.0, options: [.curveEaseOut], animations: {
+            view.transform = CGAffineTransform(scaleX: scale, y: scale)
+        }, completion: nil)
     }
     
     

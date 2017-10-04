@@ -24,6 +24,8 @@
 		E9A5AE471F7A68EA009972D5 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A5AE461F7A68EA009972D5 /* SessionManager.swift */; };
 		E9A5AE4A1F7EFD16009972D5 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A5AE491F7EFD16009972D5 /* LocationManager.swift */; };
 		E9A5AE4C1F804990009972D5 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A5AE4B1F804990009972D5 /* MainTabBarController.swift */; };
+		E9A5B1031F852DC6009972D5 /* StudentAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A5B1021F852DC6009972D5 /* StudentAnnotationView.swift */; };
+		E9A5B1061F852E64009972D5 /* StudentAnnotationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E9A5B1041F852E64009972D5 /* StudentAnnotationView.xib */; };
 		E9C77A061F4C53BC00A9BDA3 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C77A051F4C53BC00A9BDA3 /* Constants.swift */; };
 		E9C77A081F4CD54800A9BDA3 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C77A071F4CD54800A9BDA3 /* MapViewController.swift */; };
 		E9C77A0A1F4F811B00A9BDA3 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9C77A091F4F811B00A9BDA3 /* MapKit.framework */; };
@@ -79,6 +81,8 @@
 		E9A5AE461F7A68EA009972D5 /* SessionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SessionManager.swift; path = src/SessionManager.swift; sourceTree = "<group>"; };
 		E9A5AE491F7EFD16009972D5 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocationManager.swift; path = src/LocationManager.swift; sourceTree = "<group>"; };
 		E9A5AE4B1F804990009972D5 /* MainTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainTabBarController.swift; path = src/MainTabBarController.swift; sourceTree = "<group>"; };
+		E9A5B1021F852DC6009972D5 /* StudentAnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StudentAnnotationView.swift; path = src/StudentAnnotationView.swift; sourceTree = "<group>"; };
+		E9A5B1051F852E64009972D5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/StudentAnnotationView.xib; sourceTree = "<group>"; };
 		E9C77A051F4C53BC00A9BDA3 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = src/Constants.swift; sourceTree = "<group>"; };
 		E9C77A071F4CD54800A9BDA3 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MapViewController.swift; path = src/MapViewController.swift; sourceTree = "<group>"; };
 		E9C77A091F4F811B00A9BDA3 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -221,6 +225,8 @@
 				E9A5AE421F79CA0C009972D5 /* LocationListViewController.swift */,
 				E9A5AE441F79CA37009972D5 /* LocationListCell.swift */,
 				E9A5AE491F7EFD16009972D5 /* LocationManager.swift */,
+				E9A5B1021F852DC6009972D5 /* StudentAnnotationView.swift */,
+				E9A5B1041F852E64009972D5 /* StudentAnnotationView.xib */,
 			);
 			name = Locations;
 			sourceTree = "<group>";
@@ -353,6 +359,7 @@
 				E94C15651F337A420076BCD6 /* LaunchScreen.storyboard in Resources */,
 				E94C15621F337A420076BCD6 /* Assets.xcassets in Resources */,
 				E94C15601F337A420076BCD6 /* Main.storyboard in Resources */,
+				E9A5B1061F852E64009972D5 /* StudentAnnotationView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -515,6 +522,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E9A5B1031F852DC6009972D5 /* StudentAnnotationView.swift in Sources */,
 				E9A5AE451F79CA37009972D5 /* LocationListCell.swift in Sources */,
 				E94C158D1F3481250076BCD6 /* LoginViewController.swift in Sources */,
 				E9A5AE4C1F804990009972D5 /* MainTabBarController.swift in Sources */,
@@ -576,6 +584,14 @@
 				E94C15641F337A420076BCD6 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		E9A5B1041F852E64009972D5 /* StudentAnnotationView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E9A5B1051F852E64009972D5 /* Base */,
+			);
+			name = StudentAnnotationView.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
