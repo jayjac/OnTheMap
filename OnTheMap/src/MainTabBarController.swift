@@ -11,24 +11,26 @@ import UIKit
 class MainTabBarController: UITabBarController {
 
     @IBOutlet weak var reloadBarButton: UIBarButtonItem!
-    @IBOutlet weak var logoutBarButton: UIBarButtonItem!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let button = UIButton(type: .custom)
-        let image = UIImage(named: "icon_refresh")
-        //button.setBackgroundImage(image, for: .normal)
-        button.setImage(image, for: .normal)
-        button.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: 50, height: 50))
-        reloadBarButton.customView = button
-        reloadBarButton.isEnabled = true
-
     }
 
+    @IBAction func logOutWasTapped(_ sender: Any) {
+    }
+    
+    
     @IBAction func reloadWasTapped(_ sender: UIBarButtonItem) {
-        print("reload tapped")
+        LocationManager.default.retrieveStudentLocations()
     }
 
+    @IBAction func addANewLocationWasTapped(_ sender: Any) {
+        guard let storyboard = storyboard else {
+            fatalError("This view controller should be attached to a storyboard")
+        }
+        let viewController = storyboard.instantiateViewController(withIdentifier: "AddLocationViewController")
+        present(viewController, animated: true, completion: nil)
+    }
 }

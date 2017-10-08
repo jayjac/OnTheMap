@@ -22,3 +22,9 @@ struct UdacityAPI {
     static let studentLocationURL = URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!
     static let udacitySignupURL = URL(string: "https://www.udacity.com/account/auth#!/signup")!
 }
+
+
+extension Notification.Name {
+    static let loadingURLErrorNotification = Notification.Name("loadingURL")
+    static let studentLocationsWereLoaded = Notification.Name("studentLocationsLoaded")
+}

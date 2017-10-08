@@ -11,5 +11,6 @@ import UIKit
 class LocationListCell: UITableViewCell {
 
 
+    @IBOutlet weak var nameLabel: UILabel!
 
 }

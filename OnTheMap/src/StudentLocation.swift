@@ -19,6 +19,7 @@ class StudentLocation: NSObject, MKAnnotation {
     let mediaURL: URL?
     let coordinate: CLLocationCoordinate2D
     let updatedAt: Date?
+    private(set) var hasPinAlreadyBeenDropped = false
     
     init(objectId: String, uniqueKey: String?, firstName: String?, lastName: String?, mapString: String?, mediaURL: URL?, coordinate: CLLocationCoordinate2D, updatedAt: Date?) {
         self.objectId = objectId
@@ -29,6 +30,10 @@ class StudentLocation: NSObject, MKAnnotation {
         self.mediaURL = mediaURL
         self.coordinate = coordinate
         self.updatedAt = updatedAt
+    }
+    
+    func setPinDropped() {
+        hasPinAlreadyBeenDropped = true
     }
 }
 

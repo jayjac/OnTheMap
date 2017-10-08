@@ -26,6 +26,10 @@
 		E9A5AE4C1F804990009972D5 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A5AE4B1F804990009972D5 /* MainTabBarController.swift */; };
 		E9A5B1031F852DC6009972D5 /* StudentAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A5B1021F852DC6009972D5 /* StudentAnnotationView.swift */; };
 		E9A5B1061F852E64009972D5 /* StudentAnnotationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E9A5B1041F852E64009972D5 /* StudentAnnotationView.xib */; };
+		E9A5B1641F880EEC009972D5 /* MapViewController+MapDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A5B1631F880EEC009972D5 /* MapViewController+MapDelegate.swift */; };
+		E9BB81B81F892B4500655E28 /* AddLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BB81B71F892B4500655E28 /* AddLocationViewController.swift */; };
+		E9BB81BA1F89413D00655E28 /* MapCenterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BB81B91F89413D00655E28 /* MapCenterView.swift */; };
+		E9BB81C01F896D0F00655E28 /* MapCenterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E9BB81BE1F896D0F00655E28 /* MapCenterView.xib */; };
 		E9C77A061F4C53BC00A9BDA3 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C77A051F4C53BC00A9BDA3 /* Constants.swift */; };
 		E9C77A081F4CD54800A9BDA3 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C77A071F4CD54800A9BDA3 /* MapViewController.swift */; };
 		E9C77A0A1F4F811B00A9BDA3 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9C77A091F4F811B00A9BDA3 /* MapKit.framework */; };
@@ -83,6 +87,10 @@
 		E9A5AE4B1F804990009972D5 /* MainTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainTabBarController.swift; path = src/MainTabBarController.swift; sourceTree = "<group>"; };
 		E9A5B1021F852DC6009972D5 /* StudentAnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StudentAnnotationView.swift; path = src/StudentAnnotationView.swift; sourceTree = "<group>"; };
 		E9A5B1051F852E64009972D5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/StudentAnnotationView.xib; sourceTree = "<group>"; };
+		E9A5B1631F880EEC009972D5 /* MapViewController+MapDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "MapViewController+MapDelegate.swift"; path = "src/MapViewController+MapDelegate.swift"; sourceTree = "<group>"; };
+		E9BB81B71F892B4500655E28 /* AddLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddLocationViewController.swift; path = src/AddLocationViewController.swift; sourceTree = "<group>"; };
+		E9BB81B91F89413D00655E28 /* MapCenterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MapCenterView.swift; path = src/MapCenterView.swift; sourceTree = "<group>"; };
+		E9BB81BF1F896D0F00655E28 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MapCenterView.xib; sourceTree = "<group>"; };
 		E9C77A051F4C53BC00A9BDA3 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = src/Constants.swift; sourceTree = "<group>"; };
 		E9C77A071F4CD54800A9BDA3 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MapViewController.swift; path = src/MapViewController.swift; sourceTree = "<group>"; };
 		E9C77A091F4F811B00A9BDA3 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -176,6 +184,9 @@
 				E94C15891F347A680076BCD6 /* AppDelegate.swift */,
 				E9C77A051F4C53BC00A9BDA3 /* Constants.swift */,
 				E9A5AE4B1F804990009972D5 /* MainTabBarController.swift */,
+				E9BB81B71F892B4500655E28 /* AddLocationViewController.swift */,
+				E9BB81B91F89413D00655E28 /* MapCenterView.swift */,
+				E9BB81BE1F896D0F00655E28 /* MapCenterView.xib */,
 			);
 			path = OnTheMap;
 			sourceTree = "<group>";
@@ -221,6 +232,7 @@
 			isa = PBXGroup;
 			children = (
 				E9C77A071F4CD54800A9BDA3 /* MapViewController.swift */,
+				E9A5B1631F880EEC009972D5 /* MapViewController+MapDelegate.swift */,
 				E9A5AE401F7831B2009972D5 /* StudentLocation.swift */,
 				E9A5AE421F79CA0C009972D5 /* LocationListViewController.swift */,
 				E9A5AE441F79CA37009972D5 /* LocationListCell.swift */,
@@ -358,6 +370,7 @@
 			files = (
 				E94C15651F337A420076BCD6 /* LaunchScreen.storyboard in Resources */,
 				E94C15621F337A420076BCD6 /* Assets.xcassets in Resources */,
+				E9BB81C01F896D0F00655E28 /* MapCenterView.xib in Resources */,
 				E94C15601F337A420076BCD6 /* Main.storyboard in Resources */,
 				E9A5B1061F852E64009972D5 /* StudentAnnotationView.xib in Resources */,
 			);
@@ -527,7 +540,10 @@
 				E94C158D1F3481250076BCD6 /* LoginViewController.swift in Sources */,
 				E9A5AE4C1F804990009972D5 /* MainTabBarController.swift in Sources */,
 				E94C158A1F347A680076BCD6 /* AppDelegate.swift in Sources */,
+				E9A5B1641F880EEC009972D5 /* MapViewController+MapDelegate.swift in Sources */,
 				E9A5AE4A1F7EFD16009972D5 /* LocationManager.swift in Sources */,
+				E9BB81B81F892B4500655E28 /* AddLocationViewController.swift in Sources */,
+				E9BB81BA1F89413D00655E28 /* MapCenterView.swift in Sources */,
 				E9A5AE411F7831B2009972D5 /* StudentLocation.swift in Sources */,
 				E9C77A061F4C53BC00A9BDA3 /* Constants.swift in Sources */,
 				E900A4041F561D45001CB05C /* NetworkRequestFactory.swift in Sources */,
@@ -592,6 +608,14 @@
 				E9A5B1051F852E64009972D5 /* Base */,
 			);
 			name = StudentAnnotationView.xib;
+			sourceTree = "<group>";
+		};
+		E9BB81BE1F896D0F00655E28 /* MapCenterView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E9BB81BF1F896D0F00655E28 /* Base */,
+			);
+			name = MapCenterView.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

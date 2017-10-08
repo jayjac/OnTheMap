@@ -10,68 +10,53 @@ import UIKit
 import MapKit
 import CoreLocation
 
-enum AnnotationState {
-    case normal
-    case focused
-}
 
-class MapViewController: UIViewController, MKMapViewDelegate, StudentLocationDelegate {
+
+
+
+class MapViewController: UIViewController {
 
     @IBOutlet weak var mapView: MKMapView!
-    private var studentLocations: [StudentLocation]?
+
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+
+        
         let center = CLLocationCoordinate2D(latitude: 48.8886976, longitude: 2.4065027)
         let span = MKCoordinateSpan(latitudeDelta: 50.0, longitudeDelta: 50.0)
         let region = MKCoordinateRegion(center: center, span: span)
         mapView.region = region
         
         mapView.delegate = self
-        LocationManager.default.retrieveStudentLocations(andNotify: self)
+        NotificationCenter.default.addObserver(self, selector: #selector(loadingURLError(notification:)), name: .loadingURLErrorNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(studentLocationsWereLoaded), name: .studentLocationsWereLoaded, object: nil)
+        LocationManager.default.retrieveStudentLocations()
+        
+    }
+    
+    
+    @objc private func loadingURLError(notification: Notification) {
+        guard let url = notification.object as? URL else { return }
+        let alert = UIAlertController(title: "Error", message: "Could not opent url: \(url.absoluteString)", preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @objc private func studentLocationsWereLoaded() {
+        let annotations = mapView.annotations
+        mapView.removeAnnotations(annotations)
+        mapView.addAnnotations(LocationManager.default.studentLocations)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        if let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "pin") {
-            annotationView.annotation = annotation
-            return annotationView
-        }
-        else {
-            let nib = UINib(nibName: "StudentAnnotationView", bundle: nil)
-            guard let studentAnnotationView = nib.instantiate(withOwner: nil, options: nil)[0] as? StudentAnnotationView else { return nil }
-            studentAnnotationView.annotation = annotation
-            studentAnnotationView.isEnabled = true
-            return studentAnnotationView
-        }
-    }
-    
-    
-    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        self.animateAnnotation(view, to: .focused)
-        guard let studentAnnotationView = view as? StudentAnnotationView else { return }
-        studentAnnotationView.calloutView.isHidden = false
-    }
-    
-    func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
-        self.animateAnnotation(view, to: .normal)
-        guard let studentAnnotationView = view as? StudentAnnotationView else { return }
-        studentAnnotationView.calloutView.isHidden = true
-    }
-    
-    private func animateAnnotation(_ view: UIView, to state: AnnotationState) {
-        let scale: CGFloat
-        switch state {
-        case .normal:
-            scale = 1.0
-            
-        case .focused:
-            scale = 1.6
-        }
-        UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1.0, options: [.curveEaseOut], animations: {
-            view.transform = CGAffineTransform(scaleX: scale, y: scale)
-        }, completion: nil)
-    }
+
     
     
     func studentLocation(failedToRetrieveLocations error: NSError) {
@@ -81,9 +66,5 @@ class MapViewController: UIViewController, MKMapViewDelegate, StudentLocationDel
         present(alertVC, animated: true, completion: nil)
     }
     
-    func studentLocation(didRetrieveLocations locations: [StudentLocation]) {
-        self.studentLocations = locations
-        mapView.addAnnotations(locations)
-    }
 
 }
