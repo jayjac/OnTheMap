@@ -20,7 +20,7 @@ class LocationManager {
     
     // Retrieve every student's location from the Udacity server
     func retrieveStudentLocations() {
-        if let date = lastRefresh, date.timeIntervalSinceNow > -60 {
+        if let date = lastRefresh, date.timeIntervalSinceNow > -30 {
             print("not refreshing again cause laast refresh was less than a minute ago")
             return
         }

@@ -26,8 +26,6 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate, MK
     @IBOutlet weak var leftArrowButton: UIButton!
     @IBOutlet weak var clippingView: UIView!
     @IBOutlet weak var goBackButton: UIView!
-
-
     
     
 
@@ -90,11 +88,12 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate, MK
     
     
     @objc private func locationWasTapped() {
-        print("selected that location")
+        let addURLViewController = storyboard!.instantiateViewController(withIdentifier: "AddURLViewController")
+        addURLViewController.modalPresentationStyle = .overFullScreen
+        present(addURLViewController, animated: true, completion: nil)
     }
 
 
-    
     private func animateFloatingButton() {
         if isMapFullyRendered {
             self.floatingButtonLowerConstraint.constant = 60

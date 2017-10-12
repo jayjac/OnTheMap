@@ -15,8 +15,6 @@ class MainTabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        guard let navController = navigationController as? MainNavigationViewController else { return }
-        navController.setBar(to: .show)
     }
 
     @IBAction func logOutWasTapped(_ sender: Any) {
