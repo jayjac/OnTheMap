@@ -15,7 +15,8 @@ class MainTabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        guard let navController = navigationController as? MainNavigationViewController else { return }
+        navController.setBar(to: .show)
     }
 
     @IBAction func logOutWasTapped(_ sender: Any) {
@@ -28,9 +29,9 @@ class MainTabBarController: UITabBarController {
 
     @IBAction func addANewLocationWasTapped(_ sender: Any) {
         guard let storyboard = storyboard else {
-            fatalError("This view controller should be attached to a storyboard")
+            fatalError()
         }
-        let viewController = storyboard.instantiateViewController(withIdentifier: "AddLocationViewController")
-        present(viewController, animated: true, completion: nil)
+        let addLocationViewController = storyboard.instantiateViewController(withIdentifier: "AddLocationViewController")
+        present(addLocationViewController, animated: true, completion: nil)
     }
 }

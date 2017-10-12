@@ -30,9 +30,10 @@ class StudentAnnotationView: MKAnnotationView {
     
     override var annotation: MKAnnotation? {
         didSet {
-            guard let annotation = annotation as? StudentLocation else { return }
-            let firstName = annotation.firstName ?? ""
-            let lastName = annotation.lastName ?? ""
+            guard let annotation = annotation as? StudentLocationAnnotation else { return }
+            let studentInformation = annotation.studentInformation
+            let firstName = studentInformation.firstName ?? ""
+            let lastName = studentInformation.lastName ?? ""
             if firstName.isEmpty && lastName.isEmpty {
                 nameLabel.text = "Name not specified"
                 nameLabel.textColor = UIColor.gray
@@ -40,8 +41,8 @@ class StudentAnnotationView: MKAnnotationView {
                nameLabel.text = "\(firstName) \(lastName)"
                 nameLabel.textColor = UIColor.black
             }
-            if let mediaURL = annotation.mediaURL {
-                urlLabel.text = mediaURL.absoluteString
+            if let mediaURL = studentInformation.mediaURL {
+                urlLabel.text = mediaURL
                 urlLabel.textColor = UIColor.black
             } else {
                 urlLabel.text = "No URL"
@@ -67,28 +68,19 @@ class StudentAnnotationView: MKAnnotationView {
 
     
     func dropPinIfNeeded() {
-        guard let annotation = self.annotation as? StudentLocation, !annotation.hasPinAlreadyBeenDropped else { return }
+        guard let annotation = self.annotation as? StudentLocationAnnotation, !annotation.hasPinAlreadyBeenDropped else { return }
         annotation.setPinDropped()
         self.layer.transform = CATransform3DMakeTranslation(0.0, -400.0, 0.0)
-        UIView.animate(withDuration: 0.5) {
+        UIView.animate(withDuration: 0.6, delay: 0.5, options: [.curveEaseOut], animations: {
             self.layer.transform = CATransform3DIdentity
-        }
+        }, completion: nil)
     }
     
     
     @objc private func calloutWasTapped() {
-        guard var url = URL(string: urlLabel.text!) else { return }
-        if url.scheme == nil {
-            var urlComponents = URLComponents(string: url.absoluteString)!
-            urlComponents.scheme = "http"
-            url = urlComponents.url!
-            
-        }
-        if UIApplication.shared.canOpenURL(url) {
-            UIApplication.shared.openURL(url)
-        } else {
-            NotificationCenter.default.post(name: .loadingURLErrorNotification, object: url)
-        }
+        guard let studentAnnotation = annotation as? StudentLocationAnnotation else { return }
+        let studentInfo = studentAnnotation.studentInformation
+        studentInfo.openMediaURL()
     }
 
 

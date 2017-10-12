@@ -12,7 +12,7 @@ import CoreLocation
 class LocationManager {
     
     private var lastRefresh: Date?
-    private(set) var studentLocations = [StudentLocation]()
+    private(set) var studentLocationAnnotations = [StudentLocationAnnotation]()
     
     private init() {}
     
@@ -24,7 +24,6 @@ class LocationManager {
             print("not refreshing again cause laast refresh was less than a minute ago")
             return
         }
-        //print("refreshing")
         lastRefresh = Date()
         var urlComponents = URLComponents(string: "https://parse.udacity.com/parse/classes/StudentLocation")!
         let orderQueryItem = URLQueryItem(name: "order", value: "-updatedAt")
@@ -37,29 +36,17 @@ class LocationManager {
         let session = URLSession.shared
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             if error != nil { // Handle error...
+                NotificationCenter.default.post(name: .studentLocationsLoadingFailed, object: nil)
                 return
             }
-            guard let data = data, let jsonAny = try? JSONSerialization.jsonObject(with: data, options: []),
-                let jsonObject = jsonAny as? [String: Any], let results = jsonObject["results"] as? [[String: Any]] else { return }
-            
-            var locations = [StudentLocation]()
+            guard let results = NetworkRequestFactory.retrieveJSONResponse(from: data, with: "results") else { return }
+            var studentLocationAnnotations = [StudentLocationAnnotation]()
             for result in results {
-                /*print(result)
-                print("-----------")*/
-                guard let latitude = result["latitude"] as? Double, let longitude = result["longitude"] as? Double else { continue }
-                let id = result["objectId"] as! String
-                let uniqueKey = result["uniqueKey"] as? String
-                let firstName = result["firstName"] as? String
-                let lastName = result["lastName"] as? String
-                let mapString = result["mapString"] as? String
-                let mediaURL: String = result["mediaURL"] as? String ?? ""
-                let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-                let updatedAt = result["updatedAt"] as? String
-                let date = DateFormatter().date(from: updatedAt ?? "")
-                let location = StudentLocation(objectId: id, uniqueKey: uniqueKey, firstName: firstName, lastName: lastName, mapString: mapString, mediaURL: URL(string: mediaURL), coordinate: coordinate, updatedAt: date)
-                locations.append(location)
-                self.studentLocations = locations
+                guard let studentInformation = StudentInformation(attributes: result) else { continue }
+                let annotation = StudentLocationAnnotation(studentInformation: studentInformation)
+                studentLocationAnnotations.append(annotation)
             }
+            self.studentLocationAnnotations = studentLocationAnnotations
             
             // Interesting fact : annotations are not added immediately if addAnnotations method not called from main thread
             DispatchQueue.main.async {

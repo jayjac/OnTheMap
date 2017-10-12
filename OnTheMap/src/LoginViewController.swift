@@ -9,7 +9,7 @@
 import UIKit
 import FacebookLogin
 
-class LoginViewController: UIViewController, UdacitySessionDelegate, UITextFieldDelegate {
+class LoginViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
@@ -30,21 +30,7 @@ class LoginViewController: UIViewController, UdacitySessionDelegate, UITextField
         self.view.endEditing(true)
     }
     
-    // MARK: - Delegate methods
-    func sessionReturnedError(_ error: LoginError?) {
-        guard let error = error else { return }
-        let title = "Error \(error.status)"
-        let message = error.message
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
-        alert.addAction(action)
-        present(alert, animated: true, completion: nil)
-    }
 
-    func sessionWasAccepted() {
-        let tabbarVC = storyboard!.instantiateViewController(withIdentifier: "MainTabBarController")
-        present(tabbarVC, animated: true, completion: nil)
-    }
     
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -59,6 +45,8 @@ class LoginViewController: UIViewController, UdacitySessionDelegate, UITextField
 
     
     @IBAction func logInWasTapped() {
+        usernameTextField.resignFirstResponder()
+        passwordTextField.resignFirstResponder()
         guard let username = usernameTextField.text, let password = passwordTextField.text, !username.isEmpty, !password.isEmpty else { return }
         SessionManager.default.login(with: username, password: password, notify: self)
     }

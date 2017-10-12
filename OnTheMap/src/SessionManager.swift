@@ -40,8 +40,8 @@ class SessionManager {
                 }
                 return
             }
-            guard let data = NetworkRequestFactory.skipOverFiveCharacters(of: data) else { return }
-            guard let obj = try? JSONSerialization.jsonObject(with: data, options: []), let json = obj as? [String: Any] else { return }
+            guard let data = NetworkRequestFactory.skipOverFiveCharacters(of: data),
+                let json = NetworkRequestFactory.parseJSON(from: data) else { return }
             
             if let errorMsg = json["error"] as? String {
                 let status = json["status"] as? Int
@@ -49,7 +49,6 @@ class SessionManager {
                 DispatchQueue.main.async {
                     delegate.sessionReturnedError(loginError)
                 }
-                
             }
             if let account = json["account"] as? [String: Any], let session = json["session"] as? [String: Any] {
                 let id = session["id"] as! String

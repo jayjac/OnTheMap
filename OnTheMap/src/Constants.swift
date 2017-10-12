@@ -27,4 +27,5 @@ struct UdacityAPI {
 extension Notification.Name {
     static let loadingURLErrorNotification = Notification.Name("loadingURL")
     static let studentLocationsWereLoaded = Notification.Name("studentLocationsLoaded")
+    static let studentLocationsLoadingFailed = Notification.Name("studentLocationsLoadingFailed")
 }

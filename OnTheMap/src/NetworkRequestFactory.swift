@@ -20,10 +20,12 @@ enum HTTPMethod: String {
     case update
 }
 
+/**
+ * This class formats requests and responses to / from the Udacity REST-API server
+ */
 class NetworkRequestFactory {
     
     static let shared = NetworkRequestFactory()
-    private(set) var studentLocations: [StudentLocation]?
 
     
     private init() {}
@@ -40,6 +42,20 @@ class NetworkRequestFactory {
         let range = Range(5..<data.count)
         let newData = data.subdata(in: range)
         return newData
+    }
+    
+    static func retrieveJSONResponse(from data: Data?, with attributeName: String) -> [[String: Any]]? {
+        guard let data = data, let jsonAny = try? JSONSerialization.jsonObject(with: data, options: []),
+            let jsonObject = jsonAny as? [String: Any], let results = jsonObject[attributeName] as? [[String: Any]] else { return nil }
+        return results
+    }
+    
+    static func parseJSON(from data: Data) -> [String: Any]? {
+        guard let obj = try? JSONSerialization.jsonObject(with: data, options: []), let json = obj as? [String: Any] else
+        {
+            return nil
+        }
+        return json
     }
     
 

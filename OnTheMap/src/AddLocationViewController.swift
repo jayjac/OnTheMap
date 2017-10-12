@@ -11,38 +11,122 @@ import MapKit
 import CoreLocation
 
 
-class AddLocationViewController: UIViewController, CLLocationManagerDelegate {
+class AddLocationViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var locationTextField: UITextField!
     private var reverseGeocoder = CLGeocoder()
     @IBOutlet weak var mapView: MKMapView!
     private var locationManager: CLLocationManager!
-    private var mapCenterView: MapCenterView!
+    @IBOutlet weak var mapCenterView: MapCenterView!
+    @IBOutlet weak var currentLocationButton: UIView!
+    @IBOutlet weak var floatingButtonLowerConstraint: NSLayoutConstraint!
+    @IBOutlet weak var searchBox: UIView!
+    private var isMapFullyRendered = false
+    @IBOutlet weak var leftArrowButtonLeftConstraint: NSLayoutConstraint!
+    @IBOutlet weak var leftArrowButton: UIButton!
+    @IBOutlet weak var clippingView: UIView!
+    @IBOutlet weak var goBackButton: UIView!
+
+
     
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let nib = UINib(nibName: "MapCenterView", bundle: nil)
-        mapCenterView = nib.instantiate(withOwner: nil, options: nil)[0] as! MapCenterView
-        view.addSubview(mapCenterView)
+        mapView.delegate = self
+        mapView.showsPointsOfInterest = true
+        mapCenterView.alpha = 0.0
+        clippingView.clipsToBounds = true
+        leftArrowButtonLeftConstraint.constant = -20.0
+        floatingButtonLowerConstraint.constant = -160.0
+        locationTextField.delegate = self
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(locationWasTapped))
+        mapCenterView.addGestureRecognizer(tapGesture)
+
+        setupShadow(on: currentLocationButton)
+        setupShadow(on: goBackButton)
+        setupShadow(on: searchBox)
+        
+        guard let navController = navigationController as? MainNavigationViewController else { return }
+        navController.isNavigationBarHidden = true
     }
     
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        var point = mapView.center
-        point.y -= 30
-        mapCenterView.center = point
-        mapCenterView.frame.size = CGSize(width: 170, height: 60)
-        mapCenterView.autoresizingMask = [.flexibleBottomMargin, .flexibleLeftMargin, .flexibleRightMargin, .flexibleTopMargin]
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        //locationTextField.becomeFirstResponder()
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        leftArrowButtonLeftConstraint.constant = 8.0
+        UIView.animate(withDuration: 0.5, delay: 0.0, options: [.curveEaseOut], animations: { 
+            self.searchBox.layoutIfNeeded()
+        }, completion: nil)
     }
 
+    @IBAction func goBackButtonWasTapped(_ sender: Any) {
+        if let navigationController = navigationController {
+            navigationController.popViewController(animated: true)
+        } else {
+            self.dismiss(animated: true, completion: nil)
+        }
+        
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        //leftArrowButton.alpha = 0.0
+        leftArrowButtonLeftConstraint.constant = -20.0
+        UIView.animate(withDuration: 0.5, delay: 0.0, options: [.curveEaseOut], animations: {
+            self.searchBox.layoutIfNeeded()
+        }, completion: nil)
+    }
+    
+    
+    @IBAction func leftArrowWasTapped(_ sender: Any) {
+        locationTextField.resignFirstResponder()
+    }
+    
+    private func setupShadow(on view: UIView) {
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowRadius = 5.0
+        view.layer.shadowOpacity = 0.3
+        view.layer.shadowOffset = CGSize(width: 0, height: 0)
+    }
+    
+    
+    @objc private func locationWasTapped() {
+        print("selected that location")
+    }
+
+
+    
+    private func animateFloatingButton() {
+        if isMapFullyRendered {
+            self.floatingButtonLowerConstraint.constant = 60
+            let delay = 0.8
+            UIView.animate(withDuration: 0.5, delay: delay, options: [.curveEaseOut], animations: {
+                self.view.layoutIfNeeded()
+            }, completion: nil)
+        }
+
+    }
+
+    
+    private func fadeInMapCenterView() {
+        UIView.animate(withDuration: 0.8, delay: 0.5, options: [.curveEaseOut], animations: {
+            self.mapCenterView.alpha = 1.0
+        }, completion: nil)
+    }
+    
+
+    
+    
+    func mapViewDidFinishRenderingMap(_ mapView: MKMapView, fullyRendered: Bool) {
+        isMapFullyRendered = true
+        animateFloatingButton()
+        fadeInMapCenterView()
+    }
+    
+
+    
+    
+    
+    
     @IBAction func searchWasTapped(_ sender: Any) {
         guard let text = locationTextField.text, !text.isEmpty else { return}
         reverseGeocoder.geocodeAddressString(text) { (placemarks: [CLPlacemark]?, error: Error?) in
@@ -55,12 +139,13 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate {
             
             let placemark = placemarks[0]
             if let location = placemark.location {
-                self.mapView.centerCoordinate = location.coordinate
+                self.mapView.setCenter(location.coordinate, animated: true)
             }
         }
     }
     
     @IBAction func findMyCurrentLocationWasTapped(_ sender: Any) {
+        //mapRegionChangedProgrammatically = true
         locationManager = CLLocationManager()
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
@@ -73,8 +158,8 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let location = locations[0]
-        mapView.centerCoordinate = location.coordinate
-        mapView.showsUserLocation = true
+        mapView.setCenter(location.coordinate, animated: true)
+        //mapView.showsUserLocation = true
         locationManager.stopUpdatingLocation()
     }
 

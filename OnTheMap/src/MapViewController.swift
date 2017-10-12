@@ -23,18 +23,39 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-
-        
         let center = CLLocationCoordinate2D(latitude: 48.8886976, longitude: 2.4065027)
         let span = MKCoordinateSpan(latitudeDelta: 50.0, longitudeDelta: 50.0)
+        
+        observeNotifications()
         let region = MKCoordinateRegion(center: center, span: span)
         mapView.region = region
-        
         mapView.delegate = self
-        NotificationCenter.default.addObserver(self, selector: #selector(loadingURLError(notification:)), name: .loadingURLErrorNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(studentLocationsWereLoaded), name: .studentLocationsWereLoaded, object: nil)
+
         LocationManager.default.retrieveStudentLocations()
         
+    }
+    
+    
+    private func observeNotifications() {
+        let center = NotificationCenter.default
+        center.addObserver(self, selector: #selector(loadingURLError(notification:)), name: .loadingURLErrorNotification, object: nil)
+        center.addObserver(self, selector: #selector(studentLocationsWereLoaded), name: .studentLocationsWereLoaded, object: nil)
+        center.addObserver(self, selector: #selector(studentLocationsLoadingFailed), name: .studentLocationsLoadingFailed, object: nil)
+    }
+    
+    //TODO: make use of this function
+    private func showAlert(with error: NSError) {
+        let alert = UIAlertController(title: "", message: "", preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @objc private func studentLocationsLoadingFailed() {
+        let alert = UIAlertController(title: "Error", message: "Could not retrieve student locations", preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
     }
     
     
@@ -49,7 +70,7 @@ class MapViewController: UIViewController {
     @objc private func studentLocationsWereLoaded() {
         let annotations = mapView.annotations
         mapView.removeAnnotations(annotations)
-        mapView.addAnnotations(LocationManager.default.studentLocations)
+        mapView.addAnnotations(LocationManager.default.studentLocationAnnotations)
     }
     
     deinit {
