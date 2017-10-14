@@ -58,6 +58,20 @@ class NetworkRequestFactory {
         return json
     }
     
+    static func formatCredentialsIntoJSONData(username: String, password: String) -> Data? {
+        let credentials = ["username": username, "password": password]
+        let formattedCredentials = ["udacity": credentials]
+        let jsonData = try? JSONSerialization.data(withJSONObject: formattedCredentials, options: [])
+        return jsonData
+    }
+    
+    static func urlSessionWithTimeout(_ timeout: TimeInterval = 8.0) -> URLSession {
+        let urlSessionConfig = URLSessionConfiguration.default
+        urlSessionConfig.timeoutIntervalForRequest = timeout
+        let urlSession = URLSession(configuration: urlSessionConfig)
+        return urlSession
+    }
+    
 
     
 }

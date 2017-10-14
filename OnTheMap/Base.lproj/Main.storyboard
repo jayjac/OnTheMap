@@ -92,7 +92,7 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fsx-6Y-MBF">
                                 <rect key="frame" x="107" y="400.33333333333331" width="200" height="30"/>
-                                <color key="backgroundColor" red="0.0" green="0.23588876626897459" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <color key="backgroundColor" red="0.26032730937004089" green="0.39898324012756348" blue="0.6941910982131958" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <state key="normal" title="Facebook login">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
@@ -151,7 +151,7 @@
                             <constraint firstAttribute="trailing" secondItem="h7T-7h-iyh" secondAttribute="trailing" id="KyF-b9-eQe"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="" image="icon_mapview-deselected" id="IoO-k2-Ddb"/>
+                    <tabBarItem key="tabBarItem" title="" image="icon_pin" id="IoO-k2-Ddb"/>
                     <connections>
                         <outlet property="mapView" destination="h7T-7h-iyh" id="Fcz-cX-Rwr"/>
                     </connections>
@@ -265,7 +265,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vwn-rh-RNR" userLabel="Search Box">
-                                <rect key="frame" x="11" y="57" width="392" height="40"/>
+                                <rect key="frame" x="11" y="50" width="392" height="40"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jd6-zU-q3z">
                                         <rect key="frame" x="0.0" y="0.0" width="392" height="40"/>
@@ -391,7 +391,7 @@
                         <constraints>
                             <constraint firstItem="vwn-rh-RNR" firstAttribute="leading" secondItem="3wF-7S-Bca" secondAttribute="leading" priority="750" constant="11" id="2Dj-Hm-81m"/>
                             <constraint firstAttribute="trailing" secondItem="vwn-rh-RNR" secondAttribute="trailing" priority="750" constant="11" id="5DF-ro-xHj"/>
-                            <constraint firstItem="vwn-rh-RNR" firstAttribute="top" secondItem="vQC-z6-PgY" secondAttribute="bottom" constant="37" id="BH0-oR-Czg"/>
+                            <constraint firstItem="vwn-rh-RNR" firstAttribute="top" secondItem="vQC-z6-PgY" secondAttribute="bottom" constant="30" id="BH0-oR-Czg"/>
                             <constraint firstItem="q1N-lK-hlt" firstAttribute="centerY" secondItem="3wF-7S-Bca" secondAttribute="centerY" constant="-17" id="ERH-Ro-x8r"/>
                             <constraint firstItem="enj-hS-Pnz" firstAttribute="top" secondItem="SUg-KE-NgE" secondAttribute="bottom" constant="29" id="GeQ-OT-7Qp"/>
                             <constraint firstItem="SUg-KE-NgE" firstAttribute="trailing" secondItem="ELE-i3-Sl0" secondAttribute="trailing" id="Iwe-VJ-Cxk"/>
@@ -422,6 +422,34 @@
             </objects>
             <point key="canvasLocation" x="2853.6231884057975" y="665.21739130434787"/>
         </scene>
+        <!--Retrieve User Info View Controller-->
+        <scene sceneID="5Lo-cE-o5z">
+            <objects>
+                <viewController storyboardIdentifier="RetrieveUserInfoViewController" id="BBc-RT-8hD" customClass="RetrieveUserInfoViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="EBK-ii-zpD"/>
+                        <viewControllerLayoutGuide type="bottom" id="vCn-rN-iMe"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="5Ck-gA-eTf">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W0N-pD-3bN">
+                                <rect key="frame" x="184" y="100" width="147" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Retrieve user info"/>
+                                <connections>
+                                    <action selector="retrieveUserInfo:" destination="BBc-RT-8hD" eventType="touchUpInside" id="VF9-cl-lPu"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="m73-ad-b1X" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3631.884057971015" y="-97.010869565217405"/>
+        </scene>
         <!--Add URL View Controller-->
         <scene sceneID="fZF-sj-BbO">
             <objects>
@@ -436,7 +464,7 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k1y-At-dtO" userLabel="Overlay view">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.19994653041825095" colorSpace="custom" customColorSpace="displayP3"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.39289745722433461" colorSpace="custom" customColorSpace="displayP3"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DdI-8O-VmB" userLabel="URL Adding View">
                                 <rect key="frame" x="0.0" y="608" width="414" height="128"/>
@@ -561,7 +589,7 @@
         <image name="go_back" width="30" height="30"/>
         <image name="icon_addpin" width="24" height="24"/>
         <image name="icon_listview-deselected" width="75" height="50"/>
-        <image name="icon_mapview-deselected" width="75" height="50"/>
+        <image name="icon_pin" width="24" height="24"/>
         <image name="icon_refresh" width="24" height="24"/>
         <image name="iphone-with-thumb" width="1920" height="1279"/>
         <image name="left_arrow" width="20" height="20"/>

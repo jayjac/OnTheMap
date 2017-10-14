@@ -13,14 +13,15 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
-    
+    var activityIndicatorOverlay = MaterialActivityIndicatorOverlay(strokeColors: [UIColor.white, UIColor.green, UIColor.orange, UIColor.red])
     
     override func viewDidLoad() {
         super.viewDidLoad()
         usernameTextField.delegate = self
         passwordTextField.delegate = self
-        
     }
+    
+
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -47,7 +48,13 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBAction func logInWasTapped() {
         usernameTextField.resignFirstResponder()
         passwordTextField.resignFirstResponder()
-        guard let username = usernameTextField.text, let password = passwordTextField.text, !username.isEmpty, !password.isEmpty else { return }
+        guard let username = usernameTextField.text, let password = passwordTextField.text, !username.isEmpty, !password.isEmpty else {
+            //TODO: show alert if username or password missing
+            return
+        }
+        self.view.addSubview(activityIndicatorOverlay)
+        activityIndicatorOverlay.frame = view.bounds
+        activityIndicatorOverlay.startSpinning()
         SessionManager.default.login(with: username, password: password, notify: self)
     }
     
@@ -77,16 +84,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
     }
     
-
-//    func getStudentLocation() {
-//        let components = NSURLComponents(string: "https://parse.udacity.com/parse/classes/StudentLocation")!
-//        let jsonObject = ["uniqueKey": "myUniqueKeyRightHereYall"]
-//        let jsonData = try! JSONSerialization.data(withJSONObject: jsonObject, options: [])
-//        let jsonString = String(data: jsonData, encoding: .utf8)!
-//        let queryItem = URLQueryItem(name: "where", value: jsonString)
-//        components.queryItems = [queryItem]
-//        print(components.url!.absoluteString)
-//    }
     
     
     

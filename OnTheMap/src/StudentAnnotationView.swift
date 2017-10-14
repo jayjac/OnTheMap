@@ -13,7 +13,7 @@ enum AnnotationState {
     case normal
     case focused
 }
-
+//graph.facebook.com/v2.10/{user-id}/picture?height=150&width=150
 
 class StudentAnnotationView: MKAnnotationView {
     
@@ -32,8 +32,24 @@ class StudentAnnotationView: MKAnnotationView {
         didSet {
             guard let annotation = annotation as? StudentLocationAnnotation else { return }
             let studentInformation = annotation.studentInformation
+            
             let firstName = studentInformation.firstName ?? ""
             let lastName = studentInformation.lastName ?? ""
+            let id = studentInformation.uniqueKey
+            let facebookId = SessionManager.default.identity?.facebookId
+            if id == SessionManager.default.loginSuccess?.key && facebookId != nil {
+                if let url = URL(string: "https://graph.facebook.com/v2.10/\(facebookId!)/picture?height=50&width=50"),
+                    let data = try? Data.init(contentsOf: url) {
+                    studentImageView.image = UIImage(data: data)
+                    studentImageView.layer.cornerRadius = 10.0
+                    studentImageView.clipsToBounds = true
+                }
+                
+            } else {
+                studentImageView.image = UIImage(named: "student")
+                studentImageView.layer.cornerRadius = 0.0
+                studentImageView.clipsToBounds = false
+            }
             if firstName.isEmpty && lastName.isEmpty {
                 nameLabel.text = "Name not specified"
                 nameLabel.textColor = UIColor.gray

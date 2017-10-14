@@ -26,6 +26,7 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate, MK
     @IBOutlet weak var leftArrowButton: UIButton!
     @IBOutlet weak var clippingView: UIView!
     @IBOutlet weak var goBackButton: UIView!
+    private let fadeInDelegate = FadeInTransitioningDelegate()
     
     
 
@@ -45,14 +46,22 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate, MK
         setupShadow(on: goBackButton)
         setupShadow(on: searchBox)
         
-        guard let navController = navigationController as? MainNavigationViewController else { return }
+        guard let navController = navigationController else { return }
         navController.isNavigationBarHidden = true
     }
     
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        leftArrowButtonLeftConstraint.constant = 8.0
-        UIView.animate(withDuration: 0.5, delay: 0.0, options: [.curveEaseOut], animations: { 
+        animateTextFieldArrow(slideIn: true)
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        animateTextFieldArrow(slideIn: false)
+    }
+    
+    private func animateTextFieldArrow(slideIn: Bool) {
+        leftArrowButtonLeftConstraint.constant = slideIn ? 8.0 : -20.0
+        UIView.animate(withDuration: 0.5, delay: 0.0, options: [.curveEaseOut], animations: {
             self.searchBox.layoutIfNeeded()
         }, completion: nil)
     }
@@ -66,13 +75,7 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate, MK
         
     }
     
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        //leftArrowButton.alpha = 0.0
-        leftArrowButtonLeftConstraint.constant = -20.0
-        UIView.animate(withDuration: 0.5, delay: 0.0, options: [.curveEaseOut], animations: {
-            self.searchBox.layoutIfNeeded()
-        }, completion: nil)
-    }
+
     
     
     @IBAction func leftArrowWasTapped(_ sender: Any) {
@@ -89,7 +92,9 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate, MK
     
     @objc private func locationWasTapped() {
         let addURLViewController = storyboard!.instantiateViewController(withIdentifier: "AddURLViewController")
-        addURLViewController.modalPresentationStyle = .overFullScreen
+        
+        addURLViewController.modalPresentationStyle = .custom
+        addURLViewController.transitioningDelegate = fadeInDelegate
         present(addURLViewController, animated: true, completion: nil)
     }
 
