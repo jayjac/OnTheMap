@@ -15,6 +15,8 @@ class MainTabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        guard let parent = parent else { return }
+        GUI.initializeMainController(parent)
     }
 
     @IBAction func logOutWasTapped(_ sender: Any) {
@@ -22,6 +24,10 @@ class MainTabBarController: UITabBarController {
     
     
     @IBAction func reloadWasTapped(_ sender: UIBarButtonItem) {
+        guard let parent = parent  else {
+            return
+        }
+        GUI.showOverlaySpinner(on: parent.view)
         LocationManager.default.retrieveStudentLocations()
     }
 

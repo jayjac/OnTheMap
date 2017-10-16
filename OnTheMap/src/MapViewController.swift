@@ -12,8 +12,6 @@ import CoreLocation
 
 
 
-
-
 class MapViewController: UIViewController {
 
     @IBOutlet weak var mapView: MKMapView!
@@ -30,9 +28,9 @@ class MapViewController: UIViewController {
         let region = MKCoordinateRegion(center: center, span: span)
         mapView.region = region
         mapView.delegate = self
-
+       
+        GUI.showOverlaySpinnerOverMainController()
         LocationManager.default.retrieveStudentLocations()
-        
     }
     
     
@@ -43,31 +41,22 @@ class MapViewController: UIViewController {
         center.addObserver(self, selector: #selector(studentLocationsLoadingFailed), name: .studentLocationsLoadingFailed, object: nil)
     }
     
-    //TODO: make use of this function
-    private func showAlert(with error: NSError) {
-        let alert = UIAlertController(title: "", message: "", preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
-        alert.addAction(action)
-        present(alert, animated: true, completion: nil)
-    }
+
     
     @objc private func studentLocationsLoadingFailed() {
-        let alert = UIAlertController(title: "Error", message: "Could not retrieve student locations", preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
-        alert.addAction(action)
-        present(alert, animated: true, completion: nil)
+        let payload = AlertPayload(title: "Failed", message: "Could not retrieve student locations")
+        GUI.showSimpleAlert(on: self, from: payload, withExtra: nil)
     }
     
     
     @objc private func loadingURLError(notification: Notification) {
         guard let url = notification.object as? URL else { return }
-        let alert = UIAlertController(title: "Error", message: "Could not opent url: \(url.absoluteString)", preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
-        alert.addAction(action)
-        present(alert, animated: true, completion: nil)
+        let payload = AlertPayload(title: "Error", message: "Could not open url \(url.absoluteString)")
+        GUI.showSimpleAlert(on: self, from: payload, withExtra: nil)
     }
     
     @objc private func studentLocationsWereLoaded() {
+        GUI.removeOverlaySpinner()
         let annotations = mapView.annotations
         mapView.removeAnnotations(annotations)
         mapView.addAnnotations(LocationManager.default.studentLocationAnnotations)
@@ -81,10 +70,8 @@ class MapViewController: UIViewController {
     
     
     func studentLocation(failedToRetrieveLocations error: NSError) {
-        let alertVC = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
-        alertVC.addAction(action)
-        present(alertVC, animated: true, completion: nil)
+        let payload = AlertPayload(title: "Error", message: error.localizedDescription)
+        GUI.showSimpleAlert(on: self, from: payload, withExtra: nil)
     }
     
 

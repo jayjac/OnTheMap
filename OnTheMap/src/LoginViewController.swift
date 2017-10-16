@@ -13,7 +13,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
-    var activityIndicatorOverlay = MaterialActivityIndicatorOverlay(strokeColors: [UIColor.white, UIColor.green, UIColor.orange, UIColor.red])
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,14 +49,15 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         usernameTextField.resignFirstResponder()
         passwordTextField.resignFirstResponder()
         guard let username = usernameTextField.text, let password = passwordTextField.text, !username.isEmpty, !password.isEmpty else {
-            //TODO: show alert if username or password missing
+            let payload = AlertPayload(title: "Empty field(s)", message: "Both the username and password must be filled out in order to proceed")
+            GUI.showSimpleAlert(on: self, from: payload, withExtra: nil)
             return
         }
-        self.view.addSubview(activityIndicatorOverlay)
-        activityIndicatorOverlay.frame = view.bounds
-        activityIndicatorOverlay.startSpinning()
-        SessionManager.default.login(with: username, password: password, notify: self)
+        GUI.showOverlaySpinner(on: self.view)
+        SessionManager.default.login(with: .regular, notify: self, credentials: username, password)
     }
+    
+
     
 
 
@@ -68,17 +69,17 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         let loginManager = LoginManager()
         loginManager.logIn([.email], viewController: self) { (result: LoginResult) in
             switch result {
-            case .success(let grantedPermissions, let declinedPermissions, let token):
-                print("signed in with Facebook")
-                print(grantedPermissions)
-                print(declinedPermissions)
-                print(token)
+            case .success(_, _, let token):
+                GUI.showOverlaySpinner(on: self.view)
+                SessionManager.default.login(with: .facebook, notify: self, credentials: token.authenticationToken)
                 
             case .cancelled:
                 print("user canceled the signup")
+                return
                 
             case .failed(let error):
-                print(error)
+                let payload = AlertPayload(title: "Error", message: error.localizedDescription)
+                GUI.showSimpleAlert(on: self, from: payload, withExtra: nil)
             }
         }
         

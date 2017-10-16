@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreLocation
 
 class AddURLViewController: UIViewController {
 
@@ -14,6 +15,8 @@ class AddURLViewController: UIViewController {
     @IBOutlet weak var overlayView: UIView!
     @IBOutlet weak var urlBoxBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var urlAddingView: UIView!
+    var coordinates: CLLocationCoordinate2D?
+    var mapString: String?
     
     
     override func viewDidLoad() {
@@ -23,7 +26,7 @@ class AddURLViewController: UIViewController {
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOpacity = 0.4
         layer.shadowRadius = 4.0
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismiss(animated:completion:)))
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(fadeout))
         overlayView.addGestureRecognizer(tapGestureRecognizer)
         NotificationCenter.default.addObserver(self, selector: #selector(rollupURLBox(_:)), name: .UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(rolldownURLBox(_:)), name: .UIKeyboardWillHide, object: nil)
@@ -42,6 +45,10 @@ class AddURLViewController: UIViewController {
     
     deinit {
         NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc private func fadeout() {
+        self.dismiss(animated: true, completion: nil)
     }
     
     
@@ -74,11 +81,13 @@ class AddURLViewController: UIViewController {
         request.addValue(UdacityAPI.restAPIKey, forHTTPHeaderField: "X-Parse-REST-API-Key")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        guard let key = SessionManager.default.loginSuccess?.key, let url = urlTextField.text else { return }
+        guard let key = SessionManager.default.loginSuccess?.key, let url = urlTextField.text, let coordinates = self.coordinates else { return }
         let myIdentity = SessionManager.default.identity
         let firstName = myIdentity?.firstName ?? ""
         let lastName = myIdentity?.lastName ?? ""
-        let dictionary: [String: Any] = ["uniqueKey": key, "mapString": "Montabo", "mediaURL": url, "latitude": 4.93333, "longitude": -52.33333, "firstName": firstName, "lastName": lastName]
+        let mapString = self.mapString ?? ""
+        
+        let dictionary: [String: Any] = ["uniqueKey": key, "mapString": mapString, "mediaURL": url, "latitude": coordinates.latitude, "longitude": coordinates.longitude, "firstName": firstName, "lastName": lastName]
         guard let json = try? JSONSerialization.data(withJSONObject: dictionary, options: []) else {
             print("could not parse json")
             return

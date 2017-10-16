@@ -7,7 +7,8 @@
 //
 
 import Foundation
-
+import FacebookCore
+import FacebookLogin
 
 protocol UdacitySessionDelegate {
     func sessionWasAccepted()
@@ -20,6 +21,11 @@ struct UserIdentity {
     let facebookId: String?
 }
 
+enum LoginMethod {
+    case regular
+    case facebook
+}
+
 
 class SessionManager {
     
@@ -30,9 +36,70 @@ class SessionManager {
     private init() { }
     
 
+    /**
+     Logs the user in with the given credentials and login method. It then notifies the delegate when information about the login process comes in
+     - Parameters:
+        - loginMethod: login method to use
+           * .regular: credentials have to be 'username' followed by 'password' in that order
+           * .facebook: credentials consist of just the facebook authorisation token obtained thru the facebook login manager
+        - delegate: the delegate to notify
+        - credentials: the login information as described above
+     */
+    func login(with loginMethod: LoginMethod, notify delegate: UdacitySessionDelegate, credentials: String...) {
+        let data: Data?
+        switch loginMethod {
+        case .regular:
+            let username = credentials[0]
+            let password = credentials[1]
+            data = NetworkRequestFactory.formatCredentialsIntoJSONData(username: username, password: password)
+
+        case .facebook:
+            let token = credentials[0]
+            data = NetworkRequestFactory.formatFacebookTokenIntoJSONData(token)
+        }
+        
+        guard let jsonData = data else { return }
+        let request = NSMutableURLRequest(url: UdacityAPI.sessionURL)
+        NetworkRequestFactory.setupJSONRequest(request, ofType: .post)
+        request.httpBody = jsonData
+        let task = NetworkRequestFactory.urlSessionWithTimeout().dataTask(with: request as URLRequest) { (data: Data?, response: URLResponse?, error: Error?) in
+            if let error = error as NSError? {
+                let loginError = LoginError(status: error.code, message: error.localizedDescription)
+                DispatchQueue.main.async {
+                    delegate.sessionReturnedError(loginError)
+                }
+                return
+            }
+            guard let data = NetworkRequestFactory.skipOverFiveCharacters(of: data),
+                let json = NetworkRequestFactory.parseJSON(from: data) else { return }
+            
+            if let errorMsg = json["error"] as? String {
+                let status = json["status"] as? Int
+                let loginError = LoginError(status: status ?? 404, message: errorMsg)
+                DispatchQueue.main.async {
+                    delegate.sessionReturnedError(loginError)
+                }
+            }
+            if let account = json["account"] as? [String: Any], let session = json["session"] as? [String: Any] {
+                let id = session["id"] as! String
+                let expiration = session["expiration"] as! String
+                let key = account["key"] as! String
+                let dateFormatter = DateFormatter()
+                let date = dateFormatter.date(from: expiration)
+                let loginSuccess = LoginSuccess(key: key, sessionId: id, expirationDate: date)
+                self.loginSuccess = loginSuccess
+                self.retrieveUserInfo()
+                DispatchQueue.main.async {
+                    delegate.sessionWasAccepted()
+                }
+            }
+        }
+        task.resume()
+
+    }
 
     
-    func login(with username: String, password: String, notify delegate: UdacitySessionDelegate) {
+    /*func login(with username: String, password: String, notify delegate: UdacitySessionDelegate) {
         guard let jsonData = NetworkRequestFactory.formatCredentialsIntoJSONData(username: username, password: password) else {
             fatalError("Could not turn credentials into JSON Data")
         }
@@ -72,10 +139,30 @@ class SessionManager {
             }
         }
         task.resume()
-    }
+    }*/
+    
+    /*func facebookLogin(with token: AccessToken) {
+        let request = NSMutableURLRequest(url: UdacityAPI.sessionURL)
+        NetworkRequestFactory.setupJSONRequest(request, ofType: .post)
+        let credentials = ["access_token": token.authenticationToken]
+        let formattedCredentials = ["facebook_mobile": credentials]
+        guard let data = try? JSONSerialization.data(withJSONObject: formattedCredentials, options: []) else { return }
+        request.httpBody = data
+        let task = NetworkRequestFactory.urlSessionWithTimeout().dataTask(with: request as URLRequest) { data, response, error in
+            if error != nil { // Handle error...
+                return
+            }
+            let newData = NetworkRequestFactory.skipOverFiveCharacters(of: data)
+            print(NSString(data: newData!, encoding: String.Encoding.utf8.rawValue)!)
+        }
+        task.resume()
+    }*/
     
     
     func logout() {
+        let loginManager = LoginManager()
+        loginManager.logOut()
+        
         let request = NSMutableURLRequest(url: UdacityAPI.sessionURL)
         request.httpMethod = "DELETE"
         var xsrfCookie: HTTPCookie? = nil
@@ -92,9 +179,6 @@ class SessionManager {
                 return
             }
             self.loginSuccess = nil
-            //let range = Range(5..<data!.count)
-            //let newData = data?.subdata(in: range) /* subset response data! */
-            //print(NSString(data: newData!, encoding: String.Encoding.utf8.rawValue)!)
         }
         task.resume()
     }
@@ -116,8 +200,6 @@ class SessionManager {
                 let lastName = user["last_name"] as? String
                 let facebookId = user["_facebook_id"] as? String
                 let myIdentity = UserIdentity(firstName: firstName, lastName: lastName, facebookId: facebookId)
-                
-                print("facebook id: \(facebookId ?? "")")
                 self.identity = myIdentity
             }
         }

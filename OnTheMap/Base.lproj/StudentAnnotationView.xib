@@ -16,14 +16,14 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="student" translatesAutoresizingMaskIntoConstraints="NO" id="Ecy-JD-nKH">
-                    <rect key="frame" x="95" y="94" width="20" height="20"/>
+                    <rect key="frame" x="93" y="90" width="24" height="24"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="20" id="EEM-sa-t9y"/>
-                        <constraint firstAttribute="width" constant="20" id="nkh-mf-816"/>
+                        <constraint firstAttribute="height" constant="24" id="EEM-sa-t9y"/>
+                        <constraint firstAttribute="width" constant="24" id="nkh-mf-816"/>
                     </constraints>
                 </imageView>
                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cuk-iS-vWn">
-                    <rect key="frame" x="20" y="35" width="170" height="54"/>
+                    <rect key="frame" x="20" y="31" width="170" height="54"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xlf-Xh-LpH">
                             <rect key="frame" x="31" y="8" width="128" height="21"/>

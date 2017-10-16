@@ -13,33 +13,36 @@ class LocationManager {
     
     private var lastRefresh: Date?
     private(set) var studentLocationAnnotations = [StudentLocationAnnotation]()
+    private(set) var myLocations = [MyLocation]()
     
     private init() {}
     
     static let `default` = LocationManager()
     
-    // Retrieve every student's location from the Udacity server
+    /** 
+     * Retrieves Udacity students' last 100 locations from the server
+     */
     func retrieveStudentLocations() {
-        if let date = lastRefresh, date.timeIntervalSinceNow > -30 {
-            print("not refreshing again cause laast refresh was less than a minute ago")
+        if let date = lastRefresh, date.timeIntervalSinceNow > -15 {
+            GUI.removeOverlaySpinner()
             return
         }
-        lastRefresh = Date()
-        var urlComponents = URLComponents(string: "https://parse.udacity.com/parse/classes/StudentLocation")!
-        let orderQueryItem = URLQueryItem(name: "order", value: "-updatedAt")
-        let limitQueryItem = URLQueryItem(name: "limit", value: "100")
-        urlComponents.queryItems = [orderQueryItem, limitQueryItem]
-        let url = urlComponents.url!
+        
+        let url = NetworkRequestFactory.last100StudentLocationsURL()
         let request = NSMutableURLRequest(url: url)
         request.addValue(UdacityAPI.parseAppID, forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue(UdacityAPI.restAPIKey, forHTTPHeaderField: "X-Parse-REST-API-Key")
-        let session = URLSession.shared
-        let task = session.dataTask(with: request as URLRequest) { data, response, error in
-            if error != nil { // Handle error...
-                NotificationCenter.default.post(name: .studentLocationsLoadingFailed, object: nil)
+
+        let task = NetworkRequestFactory.urlSessionWithTimeout().dataTask(with: request as URLRequest) { data, response, error in
+            DispatchQueue.main.async {
+                GUI.removeOverlaySpinner()
+            }
+            if let error = error {
+                NotificationCenter.default.post(name: .studentLocationsLoadingFailed, object: error)
                 return
             }
             guard let results = NetworkRequestFactory.retrieveJSONResponse(from: data, with: "results") else { return }
+            self.lastRefresh = Date() //Only remember the date of the last successful request
             var studentLocationAnnotations = [StudentLocationAnnotation]()
             for result in results {
                 guard let studentInformation = StudentInformation(attributes: result) else { continue }
@@ -52,7 +55,40 @@ class LocationManager {
             DispatchQueue.main.async {
                NotificationCenter.default.post(name: .studentLocationsWereLoaded, object: nil)
             }
-            
+
+        }
+        task.resume()
+    }
+    
+    
+    func retrieveMyLocations() {
+        guard let url = NetworkRequestFactory.myLocationsURL() else { return }
+        let request = NSMutableURLRequest(url: url)
+        request.addValue(UdacityAPI.parseAppID, forHTTPHeaderField: "X-Parse-Application-Id")
+        request.addValue(UdacityAPI.restAPIKey, forHTTPHeaderField: "X-Parse-REST-API-Key")
+        
+        //GUI.showOverlaySpinnerOverMainController()
+        let task = NetworkRequestFactory.urlSessionWithTimeout().dataTask(with: request as URLRequest) { data, response, error in
+            DispatchQueue.main.async {
+               // GUI.removeOverlaySpinner()
+            }
+            if let error = error {
+                NotificationCenter.default.post(name: .studentLocationsLoadingFailed, object: error)
+                return
+            }
+            guard let results = NetworkRequestFactory.retrieveJSONResponse(from: data, with: "results") else { return }
+           
+            var myLocations = [MyLocation]()
+            for result in results {
+                guard let studentInformation = StudentInformation(attributes: result) else { continue }
+                let myLocation = MyLocation(location: studentInformation.coordinate, website: studentInformation.mediaURL, mapString: studentInformation.mapString)
+                myLocations.append(myLocation)
+            }
+            self.myLocations = myLocations
+
+            DispatchQueue.main.async {
+                //NotificationCenter.default.post(name: .studentLocationsWereLoaded, object: nil)
+            }
             
         }
         task.resume()

@@ -8,7 +8,7 @@
 
 import Foundation
 import CoreLocation
-
+import FacebookCore
 
 
 
@@ -44,6 +44,30 @@ class NetworkRequestFactory {
         return newData
     }
     
+    static func last100StudentLocationsURL() -> URL {
+        var urlComponents = URLComponents(url: UdacityAPI.studentLocationURL, resolvingAgainstBaseURL: false)!
+        let orderQueryItem = URLQueryItem(name: "order", value: "-updatedAt")
+        let limitQueryItem = URLQueryItem(name: "limit", value: "100")
+        urlComponents.queryItems = [orderQueryItem, limitQueryItem]
+        let url = urlComponents.url!
+        return url
+    }
+    
+    static func myLocationsURL() -> URL? {
+        guard let uniqueKey = SessionManager.default.loginSuccess?.key else { return nil }
+        let condition = ["uniqueKey": uniqueKey]
+
+        guard let data = try? JSONSerialization.data(withJSONObject: condition, options: []), let json = String(data: data, encoding: String.Encoding.utf8) else { return nil }
+        
+        var urlComponents = URLComponents(url: UdacityAPI.studentLocationURL, resolvingAgainstBaseURL: false)!
+        let orderQueryItem = URLQueryItem(name: "order", value: "-updatedAt")
+        
+        let meQueryItem = URLQueryItem(name: "where", value: json)
+        urlComponents.queryItems = [orderQueryItem, meQueryItem]
+        let url = urlComponents.url
+        return url
+    }
+    
     static func retrieveJSONResponse(from data: Data?, with attributeName: String) -> [[String: Any]]? {
         guard let data = data, let jsonAny = try? JSONSerialization.jsonObject(with: data, options: []),
             let jsonObject = jsonAny as? [String: Any], let results = jsonObject[attributeName] as? [[String: Any]] else { return nil }
@@ -61,6 +85,13 @@ class NetworkRequestFactory {
     static func formatCredentialsIntoJSONData(username: String, password: String) -> Data? {
         let credentials = ["username": username, "password": password]
         let formattedCredentials = ["udacity": credentials]
+        let jsonData = try? JSONSerialization.data(withJSONObject: formattedCredentials, options: [])
+        return jsonData
+    }
+    
+    static func formatFacebookTokenIntoJSONData(_ token: String) -> Data? {
+        let credentials = ["access_token": token]
+        let formattedCredentials = ["facebook_mobile": credentials]
         let jsonData = try? JSONSerialization.data(withJSONObject: formattedCredentials, options: [])
         return jsonData
     }

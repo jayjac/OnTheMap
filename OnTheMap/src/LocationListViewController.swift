@@ -29,12 +29,9 @@ extension LocationListViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as? LocationListCell else {
             fatalError("Could not dequeue the correct cell for the LocationList view")
         }
-        let student = LocationManager.default.studentLocationAnnotations[indexPath.row].studentInformation
-        let firstName = student.firstName ?? "No first name"
-        let lastName = student.lastName ?? "No last name"
-        let url = student.mediaURL ?? "no url"
-        cell.nameLabel.text = firstName + " " + lastName
-        cell.urlLabel.text = url
+        let studentInformation = LocationManager.default.studentLocationAnnotations[indexPath.row].studentInformation
+        cell.setup(with: studentInformation)
+
         return cell
     }
     

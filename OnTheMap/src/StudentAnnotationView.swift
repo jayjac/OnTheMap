@@ -13,7 +13,7 @@ enum AnnotationState {
     case normal
     case focused
 }
-//graph.facebook.com/v2.10/{user-id}/picture?height=150&width=150
+
 
 class StudentAnnotationView: MKAnnotationView {
     
@@ -21,6 +21,8 @@ class StudentAnnotationView: MKAnnotationView {
     @IBOutlet weak var calloutView: UIView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var urlLabel: UILabel!
+    private let myStudentImage = UIImage(named: "student_me")
+    private let notMyStudentImage = UIImage(named: "student")
 
 
     
@@ -36,20 +38,8 @@ class StudentAnnotationView: MKAnnotationView {
             let firstName = studentInformation.firstName ?? ""
             let lastName = studentInformation.lastName ?? ""
             let id = studentInformation.uniqueKey
-            let facebookId = SessionManager.default.identity?.facebookId
-            if id == SessionManager.default.loginSuccess?.key && facebookId != nil {
-                if let url = URL(string: "https://graph.facebook.com/v2.10/\(facebookId!)/picture?height=50&width=50"),
-                    let data = try? Data.init(contentsOf: url) {
-                    studentImageView.image = UIImage(data: data)
-                    studentImageView.layer.cornerRadius = 10.0
-                    studentImageView.clipsToBounds = true
-                }
-                
-            } else {
-                studentImageView.image = UIImage(named: "student")
-                studentImageView.layer.cornerRadius = 0.0
-                studentImageView.clipsToBounds = false
-            }
+            let key = SessionManager.default.loginSuccess?.key
+            studentImageView.image = (id == key) ? myStudentImage : notMyStudentImage
             if firstName.isEmpty && lastName.isEmpty {
                 nameLabel.text = "Name not specified"
                 nameLabel.textColor = UIColor.gray
@@ -92,7 +82,9 @@ class StudentAnnotationView: MKAnnotationView {
         }, completion: nil)
     }
     
-    
+    /**
+     Responds to the user tapping the map annotation callout by opening the URL
+    */
     @objc private func calloutWasTapped() {
         guard let studentAnnotation = annotation as? StudentLocationAnnotation else { return }
         let studentInfo = studentAnnotation.studentInformation
@@ -114,6 +106,13 @@ class StudentAnnotationView: MKAnnotationView {
         return isInside
     }
     
+    /**
+     Focuses or un-focuses the map annotation view when the user taps on it
+     - Parameters:
+       - state: AnnotationState enum. 
+         * .focused, the annotation image is slightly enlarged and the callout appears.
+         * .normal, the callout is discarded and the image returns to normal
+     */
     func animateAnnotation(to state: AnnotationState) {
         let scale: CGFloat
         let hidden: Bool
@@ -127,15 +126,17 @@ class StudentAnnotationView: MKAnnotationView {
             hidden = false
             calloutView.bringSubview(toFront: self)
         }
+        calloutView.alpha = hidden ? 1.0 : 0.0
         calloutView.isHidden = hidden
-        calloutView.alpha = 0.0
+        
         UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1.0, options: [.curveEaseOut], animations: {
             self.studentImageView.layer.transform = CATransform3DMakeScale(scale, scale, 1.0)
         }, completion: nil)
+
         UIView.animate(withDuration: 0.8, delay: 0.0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1.0, options: [.curveEaseOut], animations: {
-            self.calloutView.alpha = 1.0
-            
+            self.calloutView.alpha = hidden ? 0.0 : 1.0
         }, completion: nil)
+
     }
     
 

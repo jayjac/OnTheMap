@@ -41,7 +41,10 @@ struct StudentInformation {
         self.mediaURL = attributes["mediaURL"] as? String ?? ""
         self.coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         let updatedAt = attributes["updatedAt"] as? String
-        self.updatedAt = DateFormatter().date(from: updatedAt ?? "")
+        let dateFormmatter = DateFormatter()
+        dateFormmatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormmatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        self.updatedAt = dateFormmatter.date(from: updatedAt ?? "")
     }
     
     func openMediaURL() {

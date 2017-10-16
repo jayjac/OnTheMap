@@ -27,6 +27,7 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate, MK
     @IBOutlet weak var clippingView: UIView!
     @IBOutlet weak var goBackButton: UIView!
     private let fadeInDelegate = FadeInTransitioningDelegate()
+    private var mapString: String?
     
     
 
@@ -91,10 +92,12 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate, MK
     
     
     @objc private func locationWasTapped() {
-        let addURLViewController = storyboard!.instantiateViewController(withIdentifier: "AddURLViewController")
+        let addURLViewController = storyboard!.instantiateViewController(withIdentifier: "AddURLViewController") as! AddURLViewController
         
         addURLViewController.modalPresentationStyle = .custom
         addURLViewController.transitioningDelegate = fadeInDelegate
+        addURLViewController.coordinates = mapView.centerCoordinate
+        addURLViewController.mapString = mapString
         present(addURLViewController, animated: true, completion: nil)
     }
 
@@ -143,6 +146,7 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate, MK
             
             let placemark = placemarks[0]
             if let location = placemark.location {
+                self.mapString = placemark.locality
                 self.mapView.setCenter(location.coordinate, animated: true)
             }
         }

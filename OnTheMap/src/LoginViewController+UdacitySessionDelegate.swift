@@ -12,7 +12,7 @@ import UIKit
 extension LoginViewController: UdacitySessionDelegate {
     // MARK: - Delegate methods
     func sessionReturnedError(_ error: LoginError?) {
-        activityIndicatorOverlay.removeFromSuperview()
+        GUI.removeOverlaySpinner()
         guard let error = error else { return }
         let title = "Error \(error.status)"
         let message = error.message
@@ -23,14 +23,11 @@ extension LoginViewController: UdacitySessionDelegate {
     }
     
     func sessionWasAccepted() {
-        activityIndicatorOverlay.removeFromSuperview()
+        GUI.removeOverlaySpinner()
         //self.dismiss(animated: true, completion: nil)
         guard let storyboard = storyboard else {
             fatalError("LoginViewController should have a non-nil storyboard property")
         }
-        /*if let success = SessionManager.default.loginSuccess {
-            print(success.key)
-        }*/
         let mainNavigationController = storyboard.instantiateViewController(withIdentifier: "MainNavigationController")
         present(mainNavigationController, animated: true, completion: nil)
         //RetrieveUserInfoViewController
