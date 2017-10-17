@@ -33,13 +33,13 @@
 		E9BB82931F8F9AC400655E28 /* AddURLViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BB82921F8F9AC400655E28 /* AddURLViewController.swift */; };
 		E9BB82971F915EFC00655E28 /* MaterialSpinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BB82961F915EFC00655E28 /* MaterialSpinner.swift */; };
 		E9BB82991F92694D00655E28 /* MaterialActivityIndicatorOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BB82981F92694D00655E28 /* MaterialActivityIndicatorOverlay.swift */; };
-		E9BB829B1F927C2400655E28 /* RetrieveUserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BB829A1F927C2400655E28 /* RetrieveUserInfoViewController.swift */; };
 		E9BB829D1F929C1D00655E28 /* FadeInAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BB829C1F929C1D00655E28 /* FadeInAnimator.swift */; };
 		E9BB829F1F92BA4600655E28 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BB829E1F92BA4600655E28 /* SettingsViewController.swift */; };
 		E9BB82A11F93FB0B00655E28 /* GUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BB82A01F93FB0B00655E28 /* GUI.swift */; };
 		E9BB82A61F94B09E00655E28 /* PictureSettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BB82A51F94B09E00655E28 /* PictureSettingsTableViewCell.swift */; };
 		E9BB82A81F94BFA700655E28 /* MyLocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BB82A71F94BFA700655E28 /* MyLocationTableViewCell.swift */; };
 		E9BB82AA1F94C9C900655E28 /* MyLocations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BB82A91F94C9C900655E28 /* MyLocations.swift */; };
+		E9BB82AD1F951A2B00655E28 /* AddLocationViewController+Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BB82AC1F951A2B00655E28 /* AddLocationViewController+Delegate.swift */; };
 		E9C77A061F4C53BC00A9BDA3 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C77A051F4C53BC00A9BDA3 /* Constants.swift */; };
 		E9C77A081F4CD54800A9BDA3 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C77A071F4CD54800A9BDA3 /* MapViewController.swift */; };
 		E9C77A0A1F4F811B00A9BDA3 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9C77A091F4F811B00A9BDA3 /* MapKit.framework */; };
@@ -104,13 +104,13 @@
 		E9BB82921F8F9AC400655E28 /* AddURLViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddURLViewController.swift; path = src/AddURLViewController.swift; sourceTree = "<group>"; };
 		E9BB82961F915EFC00655E28 /* MaterialSpinner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MaterialSpinner.swift; path = src/MaterialSpinner.swift; sourceTree = "<group>"; };
 		E9BB82981F92694D00655E28 /* MaterialActivityIndicatorOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MaterialActivityIndicatorOverlay.swift; path = src/MaterialActivityIndicatorOverlay.swift; sourceTree = "<group>"; };
-		E9BB829A1F927C2400655E28 /* RetrieveUserInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RetrieveUserInfoViewController.swift; path = src/RetrieveUserInfoViewController.swift; sourceTree = "<group>"; };
 		E9BB829C1F929C1D00655E28 /* FadeInAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FadeInAnimator.swift; path = src/FadeInAnimator.swift; sourceTree = "<group>"; };
 		E9BB829E1F92BA4600655E28 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsViewController.swift; path = src/SettingsViewController.swift; sourceTree = "<group>"; };
 		E9BB82A01F93FB0B00655E28 /* GUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GUI.swift; path = src/GUI.swift; sourceTree = "<group>"; };
 		E9BB82A51F94B09E00655E28 /* PictureSettingsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PictureSettingsTableViewCell.swift; path = src/PictureSettingsTableViewCell.swift; sourceTree = "<group>"; };
 		E9BB82A71F94BFA700655E28 /* MyLocationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyLocationTableViewCell.swift; path = src/MyLocationTableViewCell.swift; sourceTree = "<group>"; };
 		E9BB82A91F94C9C900655E28 /* MyLocations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyLocations.swift; path = src/MyLocations.swift; sourceTree = "<group>"; };
+		E9BB82AC1F951A2B00655E28 /* AddLocationViewController+Delegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "AddLocationViewController+Delegate.swift"; path = "src/AddLocationViewController+Delegate.swift"; sourceTree = "<group>"; };
 		E9C77A051F4C53BC00A9BDA3 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = src/Constants.swift; sourceTree = "<group>"; };
 		E9C77A071F4CD54800A9BDA3 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MapViewController.swift; path = src/MapViewController.swift; sourceTree = "<group>"; };
 		E9C77A091F4F811B00A9BDA3 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -198,19 +198,15 @@
 				E94C15891F347A680076BCD6 /* AppDelegate.swift */,
 				E900A4031F561D45001CB05C /* NetworkRequestFactory.swift */,
 				E9C77A051F4C53BC00A9BDA3 /* Constants.swift */,
+				E9BB82A91F94C9C900655E28 /* MyLocations.swift */,
+				E9A5AE4B1F804990009972D5 /* MainTabBarController.swift */,
 				E94C158B1F347A850076BCD6 /* Storyboards */,
+				E9BB82AB1F94D64F00655E28 /* User Interface */,
 				E9A5AE481F7EFCF3009972D5 /* Locations */,
 				E95E57761F73048000DC7C8F /* Login */,
 				E94C15661F337A420076BCD6 /* Info.plist */,
 				E94C15611F337A420076BCD6 /* Assets.xcassets */,
-				E9BB82961F915EFC00655E28 /* MaterialSpinner.swift */,
-				E9BB82981F92694D00655E28 /* MaterialActivityIndicatorOverlay.swift */,
-				E9A5AE4B1F804990009972D5 /* MainTabBarController.swift */,
-				E9BB81B91F89413D00655E28 /* MapCenterView.swift */,
-				E9BB829A1F927C2400655E28 /* RetrieveUserInfoViewController.swift */,
-				E9BB829C1F929C1D00655E28 /* FadeInAnimator.swift */,
 				E9BB82A21F94B04400655E28 /* Settings */,
-				E9BB82A01F93FB0B00655E28 /* GUI.swift */,
 			);
 			path = OnTheMap;
 			sourceTree = "<group>";
@@ -257,6 +253,7 @@
 			isa = PBXGroup;
 			children = (
 				E9BB81B71F892B4500655E28 /* AddLocationViewController.swift */,
+				E9BB82AC1F951A2B00655E28 /* AddLocationViewController+Delegate.swift */,
 				E9BB82921F8F9AC400655E28 /* AddURLViewController.swift */,
 				E9C77A071F4CD54800A9BDA3 /* MapViewController.swift */,
 				E9A5B1631F880EEC009972D5 /* MapViewController+MapDelegate.swift */,
@@ -264,8 +261,6 @@
 				E9A5AE421F79CA0C009972D5 /* LocationListViewController.swift */,
 				E9A5AE441F79CA37009972D5 /* LocationListCell.swift */,
 				E9A5AE491F7EFD16009972D5 /* LocationManager.swift */,
-				E9A5B1021F852DC6009972D5 /* StudentAnnotationView.swift */,
-				E9A5B1041F852E64009972D5 /* StudentAnnotationView.xib */,
 			);
 			name = Locations;
 			sourceTree = "<group>";
@@ -276,9 +271,22 @@
 				E9BB829E1F92BA4600655E28 /* SettingsViewController.swift */,
 				E9BB82A51F94B09E00655E28 /* PictureSettingsTableViewCell.swift */,
 				E9BB82A71F94BFA700655E28 /* MyLocationTableViewCell.swift */,
-				E9BB82A91F94C9C900655E28 /* MyLocations.swift */,
 			);
 			name = Settings;
+			sourceTree = "<group>";
+		};
+		E9BB82AB1F94D64F00655E28 /* User Interface */ = {
+			isa = PBXGroup;
+			children = (
+				E9BB82A01F93FB0B00655E28 /* GUI.swift */,
+				E9BB829C1F929C1D00655E28 /* FadeInAnimator.swift */,
+				E9BB82961F915EFC00655E28 /* MaterialSpinner.swift */,
+				E9BB82981F92694D00655E28 /* MaterialActivityIndicatorOverlay.swift */,
+				E9BB81B91F89413D00655E28 /* MapCenterView.swift */,
+				E9A5B1021F852DC6009972D5 /* StudentAnnotationView.swift */,
+				E9A5B1041F852E64009972D5 /* StudentAnnotationView.xib */,
+			);
+			name = "User Interface";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -578,7 +586,6 @@
 				E94C158D1F3481250076BCD6 /* LoginViewController.swift in Sources */,
 				E9A5AE4C1F804990009972D5 /* MainTabBarController.swift in Sources */,
 				E94C158A1F347A680076BCD6 /* AppDelegate.swift in Sources */,
-				E9BB829B1F927C2400655E28 /* RetrieveUserInfoViewController.swift in Sources */,
 				E9BB82AA1F94C9C900655E28 /* MyLocations.swift in Sources */,
 				E9A5B1641F880EEC009972D5 /* MapViewController+MapDelegate.swift in Sources */,
 				E9A5AE4A1F7EFD16009972D5 /* LocationManager.swift in Sources */,
@@ -591,6 +598,7 @@
 				E9BB81BA1F89413D00655E28 /* MapCenterView.swift in Sources */,
 				E9BB829F1F92BA4600655E28 /* SettingsViewController.swift in Sources */,
 				E9C77A061F4C53BC00A9BDA3 /* Constants.swift in Sources */,
+				E9BB82AD1F951A2B00655E28 /* AddLocationViewController+Delegate.swift in Sources */,
 				E9BB82A11F93FB0B00655E28 /* GUI.swift in Sources */,
 				E900A4041F561D45001CB05C /* NetworkRequestFactory.swift in Sources */,
 				E9C77A081F4CD54800A9BDA3 /* MapViewController.swift in Sources */,

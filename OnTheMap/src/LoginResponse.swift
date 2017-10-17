@@ -21,36 +21,29 @@ struct LoginError {
     let message: String
 }
 
-enum LoginStatus {
-    case loggedIn
-    case loggedOut
-}
+fileprivate let archiveKey = "loginCredentials"
+fileprivate let loginSuccessKey = "loginSuccess"
 
 class LoginCredentials: NSObject, NSCoding {
     
-    var status: LoginStatus
+
     private var loginSuccess: LoginSuccess?
-    private static let archiveKey = "loginCredentials"
+
     
     override private init() {
-        status = .loggedOut
+
         super.init()
     }
 
     required init?(coder aDecoder: NSCoder) {
-        if let status = aDecoder.decodeObject(forKey: "status") as? LoginStatus,
-            let loginSuccess = aDecoder.decodeObject(forKey: "loginSuccess") as? LoginSuccess {
-            self.status = status
+        if let loginSuccess = aDecoder.decodeObject(forKey: loginSuccessKey) as? LoginSuccess {
             self.loginSuccess = loginSuccess
-        } else {
-            status = .loggedOut
         }
         super.init()
     }
     
     func encode(with aCoder: NSCoder) {
-        aCoder.encode(status, forKey: "status")
-        aCoder.encode(loginSuccess, forKey: "loginSuccess")
+        aCoder.encode(loginSuccess, forKey: loginSuccessKey)
     }
     
     static var shared: LoginCredentials {

@@ -17,8 +17,8 @@ class LocationListCell: UITableViewCell {
     @IBOutlet weak var dateLabel: UILabel!
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        formatter.timeStyle = .none
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
         return formatter
     }()
     
@@ -30,14 +30,27 @@ class LocationListCell: UITableViewCell {
         - studentInformation: the student data to fill the cell with
      */
     func setup(with studentInformation: StudentInformation) {
-        let firstName = studentInformation.firstName ?? "No first name"
-        let lastName = studentInformation.lastName ?? "No last name"
+        let firstName = studentInformation.firstName ?? ""
+        let lastName = studentInformation.lastName ?? ""
+        if firstName.isEmpty && lastName.isEmpty {
+            nameLabel.text = "Name not specified"
+            nameLabel.textColor = UIColor.darkGray
+        } else {
+            nameLabel.text = firstName + " " + lastName
+            nameLabel.textColor = UIColor.black
+        }
         let url = studentInformation.mediaURL ?? "no url"
-        nameLabel.text = firstName + " " + lastName
         urlLabel.text = url
-        mapStringLabel.text = studentInformation.mapString
+        if let mapString = studentInformation.mapString, !mapString.isEmpty {
+            mapStringLabel.text = mapString
+            mapStringLabel.textColor = UIColor.black
+        } else {
+            mapStringLabel.text = "Unknown location"
+            mapStringLabel.textColor = UIColor.darkGray
+        }
+        
         if let date = studentInformation.updatedAt {
-            dateLabel.text = LocationListCell.dateFormatter.string(from: date)
+            dateLabel.text = "(" + LocationListCell.dateFormatter.string(from: date) + ")"
         } else {
             dateLabel.text = ""
         }

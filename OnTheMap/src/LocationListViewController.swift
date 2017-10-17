@@ -13,8 +13,18 @@ class LocationListViewController: UIViewController {
     @IBOutlet weak var listTableView: UITableView!
     let cellReuseIdentifier = "LocationListCell"
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(studentLocationsWereLoaded), name: .studentLocationsWereLoaded, object: nil)
+    }
     
-
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc private func studentLocationsWereLoaded() {
+        listTableView.reloadData()
+    }
 }
 
 

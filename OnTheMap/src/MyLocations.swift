@@ -10,6 +10,7 @@ import CoreLocation
 
 
 struct MyLocation {
+    let objectId: String
     let location: CLLocationCoordinate2D
     let website: String?
     let mapString: String?

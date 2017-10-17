@@ -29,6 +29,10 @@ struct GUI {
         mainController = controller
     }
     
+    static func deinitMainController() {
+        mainController = nil
+    }
+    
     
     static func showOverlaySpinnerOverMainController() {
         guard let controller = mainController else { return }
@@ -42,30 +46,39 @@ struct GUI {
        - payload: the AlertPayload struct that provides the title and message to display
      */
     static func showSimpleAlert(on viewController: UIViewController, from payload: AlertPayload, withExtra actions: [UIAlertAction]?) {
-        let alert = UIAlertController(title: payload.title, message: payload.message, preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
-        if let actions = actions {
-            for action in actions {
-                alert.addAction(action)
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: payload.title, message: payload.message, preferredStyle: .alert)
+            let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+            if let actions = actions {
+                for action in actions {
+                    alert.addAction(action)
+                }
             }
+            alert.addAction(action)
+            viewController.present(alert, animated: true, completion: nil)
         }
-        alert.addAction(action)
-        viewController.present(alert, animated: true, completion: nil)
+        
     }
     
     
     static func showOverlaySpinner(on view: UIView, with colors: [UIColor] = [UIColor.white, UIColor.green, UIColor.orange, UIColor.red]) {
-        overlay?.removeFromSuperview()
-        let activityIndicatorOverlay = MaterialActivityIndicatorOverlay(strokeColors: colors)
-        overlay = activityIndicatorOverlay
-        view.addSubview(activityIndicatorOverlay)
-        activityIndicatorOverlay.frame = view.bounds
-        activityIndicatorOverlay.startSpinning()
-        overlay = activityIndicatorOverlay
+        DispatchQueue.main.async {
+            overlay?.removeFromSuperview()
+            let activityIndicatorOverlay = MaterialActivityIndicatorOverlay(strokeColors: colors)
+            overlay = activityIndicatorOverlay
+            view.addSubview(activityIndicatorOverlay)
+            activityIndicatorOverlay.frame = view.bounds
+            activityIndicatorOverlay.startSpinning()
+            overlay = activityIndicatorOverlay
+        }
+
     }
     
     static func removeOverlaySpinner() {
-        overlay?.removeFromSuperview()
-        overlay = nil
+        DispatchQueue.main.async {
+            overlay?.removeFromSuperview()
+            overlay = nil
+        }
+
     }
 }

@@ -30,7 +30,7 @@ class MapViewController: UIViewController {
         mapView.delegate = self
        
         GUI.showOverlaySpinnerOverMainController()
-        LocationManager.default.retrieveStudentLocations()
+        
     }
     
     

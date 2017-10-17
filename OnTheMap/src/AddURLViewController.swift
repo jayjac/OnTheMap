@@ -17,7 +17,7 @@ class AddURLViewController: UIViewController {
     @IBOutlet weak var urlAddingView: UIView!
     var coordinates: CLLocationCoordinate2D?
     var mapString: String?
-    
+    @IBOutlet weak var mapStringLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +30,8 @@ class AddURLViewController: UIViewController {
         overlayView.addGestureRecognizer(tapGestureRecognizer)
         NotificationCenter.default.addObserver(self, selector: #selector(rollupURLBox(_:)), name: .UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(rolldownURLBox(_:)), name: .UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(locationWasAdded), name: .addingLocationSuccess, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(errorAddingLocation(_:)), name: .addingLocationFailed, object: nil)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -40,6 +42,7 @@ class AddURLViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        mapStringLabel.text = mapString
         urlTextField.becomeFirstResponder()
     }
     
@@ -51,13 +54,23 @@ class AddURLViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
+    @objc private func locationWasAdded() {
+        GUI.removeOverlaySpinner()
+        fadeout()
+    }
+    
+    
+    @objc private func errorAddingLocation(_ notification: Notification) {
+        GUI.removeOverlaySpinner()
+        let payload = AlertPayload(title: "Error", message: "Your location could not be sent to the server ")
+        GUI.showSimpleAlert(on: self, from: payload, withExtra: nil)
+    }
     
     @objc private func rollupURLBox(_ notification: Notification) {
         guard let info = notification.userInfo,
             let duration = info[UIKeyboardAnimationDurationUserInfoKey] as? Double,
             let endFrame = info[UIKeyboardFrameEndUserInfoKey] as? CGRect else { return }
-        
-        
+
         let distance = endFrame.height
         self.urlBoxBottomConstraint.constant = distance
         UIView.animate(withDuration: duration) { 
@@ -75,34 +88,14 @@ class AddURLViewController: UIViewController {
     }
     
     @IBAction func sendURLButtonWasTapped(_ sender: Any) {
-        let request = NSMutableURLRequest(url: UdacityAPI.studentLocationURL) //NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
-        request.httpMethod = "POST"
-        request.addValue(UdacityAPI.parseAppID, forHTTPHeaderField: "X-Parse-Application-Id")
-        request.addValue(UdacityAPI.restAPIKey, forHTTPHeaderField: "X-Parse-REST-API-Key")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        guard let key = SessionManager.default.loginSuccess?.key, let url = urlTextField.text, let coordinates = self.coordinates else { return }
-        let myIdentity = SessionManager.default.identity
-        let firstName = myIdentity?.firstName ?? ""
-        let lastName = myIdentity?.lastName ?? ""
-        let mapString = self.mapString ?? ""
-        
-        let dictionary: [String: Any] = ["uniqueKey": key, "mapString": mapString, "mediaURL": url, "latitude": coordinates.latitude, "longitude": coordinates.longitude, "firstName": firstName, "lastName": lastName]
-        guard let json = try? JSONSerialization.data(withJSONObject: dictionary, options: []) else {
-            print("could not parse json")
+        guard let url = urlTextField.text, let coordinates = self.coordinates else { return }
+        if url.isEmpty {
+            let payload = AlertPayload(title: "Empty field", message: "Please provide a URL you would like to share")
+            GUI.showSimpleAlert(on: self, from: payload, withExtra: nil)
             return
         }
-
-        request.httpBody = json
-        let session = URLSession.shared
-        let task = session.dataTask(with: request as URLRequest) { data, response, error in
-            if error != nil { // Handle error…
-                print("some error occurred")
-                return
-            }
-            print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)
-        }
-        task.resume()
+        GUI.showOverlaySpinner(on: self.view)
+        LocationManager.default.addLocation(with: url, coordinates: coordinates, mapString: self.mapString)
     }
 
     @IBAction func cancelButtonWasTapped(_ sender: Any) {

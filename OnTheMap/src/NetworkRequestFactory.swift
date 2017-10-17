@@ -30,6 +30,21 @@ class NetworkRequestFactory {
     
     private init() {}
     
+    static func JSONRequest(for url: URL, ofType method: HTTPMethod) -> URLRequest {
+        var request = URLRequest(url: url)
+        request.httpMethod = method.rawValue.uppercased()
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        return request
+    }
+    
+    static func urlSessionWithTimeout(_ timeout: TimeInterval = 8.0) -> URLSession {
+        let urlSessionConfig = URLSessionConfiguration.default
+        urlSessionConfig.timeoutIntervalForRequest = timeout
+        let urlSession = URLSession(configuration: urlSessionConfig)
+        return urlSession
+    }
+    
     static func setupJSONRequest(_ request: NSMutableURLRequest, ofType method: HTTPMethod = .get) {
         request.httpMethod = method.rawValue.uppercased()
         request.addValue("application/json", forHTTPHeaderField: "Accept")
@@ -74,14 +89,27 @@ class NetworkRequestFactory {
         return results
     }
     
+    /**
+     Attempts to transform a Data object into a JSON [String: Any]
+     - Returns:
+       the object or nil if parsing failed
+     */
     static func parseJSON(from data: Data) -> [String: Any]? {
-        guard let obj = try? JSONSerialization.jsonObject(with: data, options: []), let json = obj as? [String: Any] else
+        guard let obj = try? JSONSerialization.jsonObject(with: data, options: []),
+            let json = obj as? [String: Any] else
         {
             return nil
         }
         return json
     }
     
+    
+    /**
+     Returns a JSON object's data corresponding to {'udacity': {'username': <string>, 'password': <string>}}
+     - Parameters:
+       - username: Identity of the user trying to log in
+       - password: used to identify the user
+     */
     static func formatCredentialsIntoJSONData(username: String, password: String) -> Data? {
         let credentials = ["username": username, "password": password]
         let formattedCredentials = ["udacity": credentials]
@@ -89,6 +117,9 @@ class NetworkRequestFactory {
         return jsonData
     }
     
+    /**
+     Returns a JSON object's data of the form {'access_toke': {'facebook_mobile': <token string>}}
+     */
     static func formatFacebookTokenIntoJSONData(_ token: String) -> Data? {
         let credentials = ["access_token": token]
         let formattedCredentials = ["facebook_mobile": credentials]
@@ -96,12 +127,7 @@ class NetworkRequestFactory {
         return jsonData
     }
     
-    static func urlSessionWithTimeout(_ timeout: TimeInterval = 8.0) -> URLSession {
-        let urlSessionConfig = URLSessionConfiguration.default
-        urlSessionConfig.timeoutIntervalForRequest = timeout
-        let urlSession = URLSession(configuration: urlSessionConfig)
-        return urlSession
-    }
+
     
 
     

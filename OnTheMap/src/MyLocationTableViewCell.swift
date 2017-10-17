@@ -10,15 +10,13 @@ import UIKit
 
 class MyLocationTableViewCell: UITableViewCell {
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    @IBOutlet weak var urlLabel: UILabel!
+    @IBOutlet weak var mapStringLabel: UILabel!
+    
+    
+    func setup(with myLocation: MyLocation) {
+        urlLabel.text = myLocation.website
+        mapStringLabel.text = myLocation.mapString
     }
 
 }

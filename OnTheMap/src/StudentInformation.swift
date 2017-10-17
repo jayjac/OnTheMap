@@ -19,7 +19,7 @@ import MapKit
 
 struct StudentInformation {
     
-    let objectId: String?
+    let objectId: String
     let uniqueKey: String?
     let firstName: String?
     let lastName: String?
@@ -30,10 +30,10 @@ struct StudentInformation {
     
     init?(attributes: [String: Any]) {
         guard let latitude = attributes["latitude"] as? Double,
-            let longitude = attributes["longitude"] as? Double else {
+            let longitude = attributes["longitude"] as? Double, let objectId = attributes["objectId"] as? String else {
             return nil
         }
-        self.objectId = attributes["objectId"] as? String
+        self.objectId = objectId
         self.uniqueKey = attributes["uniqueKey"] as? String
         self.firstName = attributes["firstName"] as? String
         self.lastName = attributes["lastName"] as? String

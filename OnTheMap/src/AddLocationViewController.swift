@@ -11,10 +11,9 @@ import MapKit
 import CoreLocation
 
 
-class AddLocationViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UITextFieldDelegate {
+class AddLocationViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate {
     
     @IBOutlet weak var locationTextField: UITextField!
-    private var reverseGeocoder = CLGeocoder()
     @IBOutlet weak var mapView: MKMapView!
     private var locationManager: CLLocationManager!
     @IBOutlet weak var mapCenterView: MapCenterView!
@@ -28,6 +27,7 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate, MK
     @IBOutlet weak var goBackButton: UIView!
     private let fadeInDelegate = FadeInTransitioningDelegate()
     private var mapString: String?
+    private var timer: Timer?
     
     
 
@@ -35,7 +35,7 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate, MK
         super.viewDidLoad()
         mapView.delegate = self
         mapView.showsPointsOfInterest = true
-        mapCenterView.alpha = 0.0
+        mapCenterView.isHidden = true
         clippingView.clipsToBounds = true
         leftArrowButtonLeftConstraint.constant = -20.0
         floatingButtonLowerConstraint.constant = -160.0
@@ -52,15 +52,9 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate, MK
     }
     
     
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        animateTextFieldArrow(slideIn: true)
-    }
+
     
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        animateTextFieldArrow(slideIn: false)
-    }
-    
-    private func animateTextFieldArrow(slideIn: Bool) {
+    func animateTextFieldArrow(slideIn: Bool) {
         leftArrowButtonLeftConstraint.constant = slideIn ? 8.0 : -20.0
         UIView.animate(withDuration: 0.5, delay: 0.0, options: [.curveEaseOut], animations: {
             self.searchBox.layoutIfNeeded()
@@ -114,11 +108,11 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate, MK
     }
 
     
-    private func fadeInMapCenterView() {
+    /*private func fadeInMapCenterView() {
         UIView.animate(withDuration: 0.8, delay: 0.5, options: [.curveEaseOut], animations: {
             self.mapCenterView.alpha = 1.0
         }, completion: nil)
-    }
+    }*/
     
 
     
@@ -126,34 +120,67 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate, MK
     func mapViewDidFinishRenderingMap(_ mapView: MKMapView, fullyRendered: Bool) {
         isMapFullyRendered = true
         animateFloatingButton()
-        fadeInMapCenterView()
+        //fadeInMapCenterView()
     }
     
 
-    
-    
-    
-    
-    @IBAction func searchWasTapped(_ sender: Any) {
-        guard let text = locationTextField.text, !text.isEmpty else { return}
-        reverseGeocoder.geocodeAddressString(text) { (placemarks: [CLPlacemark]?, error: Error?) in
-            guard let placemarks = placemarks else { return }
-            
-            for placemark in placemarks {
-                print(placemark.locality ?? "")
-                print(placemark.country ?? "")
+    private func reverseGeocode(text: String) {
+        mapCenterView.isHidden = true
+        LocationManager.default.reverseGeocode(text: text) { (placemarks: [CLPlacemark]?, error: Error?) in
+            GUI.removeOverlaySpinner()
+            if let error = error {
+                let payload = AlertPayload(title: "Not found", message: "\(error.localizedDescription)")
+                GUI.showSimpleAlert(on: self, from: payload, withExtra: nil)
+                return
             }
+            //GUI.removeOverlaySpinner()
+            guard let placemarks = placemarks else { return }
             
             let placemark = placemarks[0]
             if let location = placemark.location {
-                self.mapString = placemark.locality
-                self.mapView.setCenter(location.coordinate, animated: true)
+                DispatchQueue.main.async {
+                    self.mapString = placemark.locality
+                    let span = MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5)
+                    let region = MKCoordinateRegion(center: location.coordinate, span: span)
+                    self.mapView.setRegion(region, animated: true)
+                    self.mapCenterView.isHidden = false
+                }
+                
             }
         }
     }
     
+    func searchForInputAddress() {
+        guard let text = locationTextField.text, !text.isEmpty else {
+            let payload = AlertPayload(title: "Empty field", message: "Please provide a location to search for")
+            GUI.showSimpleAlert(on: self, from: payload, withExtra: nil)
+            return
+        }
+        GUI.showOverlaySpinner(on: self.view)
+        reverseGeocode(text: text)
+        timeOutTimerAfter()
+    }
+    
+    @IBAction func searchWasTapped(_ sender: Any) {
+        searchForInputAddress()
+    }
+    
+    private func timeOutTimerAfter(seconds: TimeInterval = 8.0) {
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(timeInterval: seconds, target: self, selector: #selector(requestTimedOut), userInfo: nil, repeats: false)
+    }
+    
+    @objc private func requestTimedOut() {
+        if LocationManager.default.isGeocoding {
+            GUI.removeOverlaySpinner()
+            LocationManager.default.cancelGeoCoding()
+            let payload = AlertPayload(title: "Time out", message: "Could not find the required location fast enough. Please check your internet or 3G connection and try again later.")
+            GUI.showSimpleAlert(on: self, from: payload, withExtra: nil)
+        }
+
+    }
+    
     @IBAction func findMyCurrentLocationWasTapped(_ sender: Any) {
-        //mapRegionChangedProgrammatically = true
         locationManager = CLLocationManager()
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()

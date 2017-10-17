@@ -10,7 +10,9 @@
 import UIKit
 
 extension LoginViewController: UdacitySessionDelegate {
-    // MARK: - Delegate methods
+    
+    
+    
     func sessionReturnedError(_ error: LoginError?) {
         GUI.removeOverlaySpinner()
         guard let error = error else { return }
@@ -24,10 +26,10 @@ extension LoginViewController: UdacitySessionDelegate {
     
     func sessionWasAccepted() {
         GUI.removeOverlaySpinner()
-        //self.dismiss(animated: true, completion: nil)
         guard let storyboard = storyboard else {
             fatalError("LoginViewController should have a non-nil storyboard property")
         }
+        
         let mainNavigationController = storyboard.instantiateViewController(withIdentifier: "MainNavigationController")
         present(mainNavigationController, animated: true, completion: nil)
         //RetrieveUserInfoViewController

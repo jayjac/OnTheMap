@@ -28,6 +28,11 @@ struct UdacityAPI {
         let url = URL(string: "https://graph.facebook.com/v2.10/\(facebookId)/picture?height=\(width)&width=\(height)")
         return url!
     }
+    
+    static func userInformationURL(id: String) -> URL {
+        let url = URL(string: "https://www.udacity.com/api/users/\(id)")!
+        return url
+    }
 }
 
 
@@ -35,4 +40,14 @@ extension Notification.Name {
     static let loadingURLErrorNotification = Notification.Name("loadingURL")
     static let studentLocationsWereLoaded = Notification.Name("studentLocationsLoaded")
     static let studentLocationsLoadingFailed = Notification.Name("studentLocationsLoadingFailed")
+    
+    static let logOut = Notification.Name("logOut")
+    
+    static let addingLocationSuccess = Notification.Name("addingLocationSuccess")
+    static let addingLocationFailed = Notification.Name("addingLocationFailed")
+    
+    static let loadingMyLocationsSuccess = Notification.Name("loadingMyLocationsSuccess")
+    static let loadingMyLocationsFailed = Notification.Name("loadingMyLocationsFailed")
+    
+    static let removedMyLocation = Notification.Name("removedMyLocation")
 }

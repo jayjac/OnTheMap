@@ -99,71 +99,11 @@ class SessionManager {
     }
 
     
-    /*func login(with username: String, password: String, notify delegate: UdacitySessionDelegate) {
-        guard let jsonData = NetworkRequestFactory.formatCredentialsIntoJSONData(username: username, password: password) else {
-            fatalError("Could not turn credentials into JSON Data")
-        }
-        let request = NSMutableURLRequest(url: UdacityAPI.sessionURL)
-        NetworkRequestFactory.setupJSONRequest(request, ofType: .post)
-        request.httpBody = jsonData
-        let task = NetworkRequestFactory.urlSessionWithTimeout().dataTask(with: request as URLRequest) { (data: Data?, response: URLResponse?, error: Error?) in
-            if let error = error as NSError? {
-                let loginError = LoginError(status: error.code, message: error.localizedDescription)
-                DispatchQueue.main.async {
-                    delegate.sessionReturnedError(loginError)
-                }
-                return
-            }
-            guard let data = NetworkRequestFactory.skipOverFiveCharacters(of: data),
-                let json = NetworkRequestFactory.parseJSON(from: data) else { return }
-            
-            if let errorMsg = json["error"] as? String {
-                let status = json["status"] as? Int
-                let loginError = LoginError(status: status ?? 404, message: errorMsg)
-                DispatchQueue.main.async {
-                    delegate.sessionReturnedError(loginError)
-                }
-            }
-            if let account = json["account"] as? [String: Any], let session = json["session"] as? [String: Any] {
-                let id = session["id"] as! String
-                let expiration = session["expiration"] as! String
-                let key = account["key"] as! String
-                let dateFormatter = DateFormatter()
-                let date = dateFormatter.date(from: expiration)
-                let loginSuccess = LoginSuccess(key: key, sessionId: id, expirationDate: date)
-                self.loginSuccess = loginSuccess
-                self.retrieveUserInfo()
-                DispatchQueue.main.async {
-                    delegate.sessionWasAccepted()
-                }
-            }
-        }
-        task.resume()
-    }*/
-    
-    /*func facebookLogin(with token: AccessToken) {
-        let request = NSMutableURLRequest(url: UdacityAPI.sessionURL)
-        NetworkRequestFactory.setupJSONRequest(request, ofType: .post)
-        let credentials = ["access_token": token.authenticationToken]
-        let formattedCredentials = ["facebook_mobile": credentials]
-        guard let data = try? JSONSerialization.data(withJSONObject: formattedCredentials, options: []) else { return }
-        request.httpBody = data
-        let task = NetworkRequestFactory.urlSessionWithTimeout().dataTask(with: request as URLRequest) { data, response, error in
-            if error != nil { // Handle error...
-                return
-            }
-            let newData = NetworkRequestFactory.skipOverFiveCharacters(of: data)
-            print(NSString(data: newData!, encoding: String.Encoding.utf8.rawValue)!)
-        }
-        task.resume()
-    }*/
-    
-    
     func logout() {
         let loginManager = LoginManager()
         loginManager.logOut()
         
-        let request = NSMutableURLRequest(url: UdacityAPI.sessionURL)
+        var request = URLRequest(url: UdacityAPI.sessionURL)
         request.httpMethod = "DELETE"
         var xsrfCookie: HTTPCookie? = nil
         let sharedCookieStorage = HTTPCookieStorage.shared
@@ -173,35 +113,41 @@ class SessionManager {
         if let xsrfCookie = xsrfCookie {
             request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
         }
-        let session = URLSession.shared
-        let task = session.dataTask(with: request as URLRequest) { data, response, error in
+        
+        let task = NetworkRequestFactory.urlSessionWithTimeout(10.0).dataTask(with: request) { data, response, error in
             if error != nil { // Handle error…
                 return
             }
             self.loginSuccess = nil
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: .logOut, object: nil)
+            }
+            
         }
         task.resume()
     }
     
+    
+    /**
+     Retrieves the app user's information from the Udacity server
+     */
     func retrieveUserInfo() {
         guard let success = loginSuccess else { return }
         let id = success.key
-        let request = NSMutableURLRequest(url: URL(string: "https://www.udacity.com/api/users/\(id)")!)
-        let session = URLSession.shared
-        let task = session.dataTask(with: request as URLRequest) { data, response, error in
+        let request = URLRequest(url: UdacityAPI.userInformationURL(id: id))
+
+        let task = NetworkRequestFactory.urlSessionWithTimeout().dataTask(with: request) { data, response, error in
             if error != nil { // Handle error...
                 return
             }
-            guard let newData = NetworkRequestFactory.skipOverFiveCharacters(of: data) else { return }
-            
-            if let obj = try? JSONSerialization.jsonObject(with: newData, options: []), let json = obj as? [String: Any] {
-                guard let user = json["user"] as? [String: Any] else { return }
-                let firstName = user["first_name"] as? String
-                let lastName = user["last_name"] as? String
-                let facebookId = user["_facebook_id"] as? String
-                let myIdentity = UserIdentity(firstName: firstName, lastName: lastName, facebookId: facebookId)
-                self.identity = myIdentity
-            }
+            guard let newData = NetworkRequestFactory.skipOverFiveCharacters(of: data),
+                let json = NetworkRequestFactory.parseJSON(from: newData),
+                let user = json["user"] as? [String: Any] else { return }
+            let firstName = user["first_name"] as? String
+            let lastName = user["last_name"] as? String
+            let facebookId = user["_facebook_id"] as? String
+            let myIdentity = UserIdentity(firstName: firstName, lastName: lastName, facebookId: facebookId)
+            self.identity = myIdentity
         }
         task.resume()
     }
