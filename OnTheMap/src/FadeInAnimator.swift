@@ -8,6 +8,9 @@
 
 import UIKit
 
+/**
+ Ended up not using this class because of a weird behavior on iPad where the presented screen slides from the left for some reason
+ */
 class FadeInAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     
     private let duration: TimeInterval = 0.5

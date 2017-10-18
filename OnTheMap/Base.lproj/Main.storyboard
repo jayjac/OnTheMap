@@ -355,8 +355,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="82"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Url" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zUk-5f-FwU">
-                                                    <rect key="frame" x="41" y="14" width="23" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Url" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zUk-5f-FwU">
+                                                    <rect key="frame" x="41" y="14" width="11.666666666666664" height="23.333333333333336"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="8"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -510,12 +510,13 @@
                                 <rect key="frame" x="342" y="601" width="42" height="42"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qf5-hv-aZb">
-                                        <rect key="frame" x="11" y="11" width="20" height="20"/>
+                                        <rect key="frame" x="3.6666666666666856" y="3.6666666666666288" width="35" height="35"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="20" id="Pic-yV-bHq"/>
-                                            <constraint firstAttribute="width" constant="20" id="n0r-bL-k7N"/>
+                                            <constraint firstAttribute="height" constant="35" id="Pic-yV-bHq"/>
+                                            <constraint firstAttribute="width" constant="35" id="n0r-bL-k7N"/>
                                         </constraints>
                                         <color key="tintColor" red="0.40060210987261147" green="0.40060210987261147" blue="0.40060210987261147" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
                                         <state key="normal" image="go_back"/>
                                         <connections>
                                             <action selector="goBackButtonWasTapped:" destination="KxL-Oz-lun" eventType="touchUpInside" id="iaW-w5-He1"/>
@@ -539,12 +540,13 @@
                                 <rect key="frame" x="342" y="665" width="42" height="42"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k5T-1l-JCu">
-                                        <rect key="frame" x="9" y="9" width="25" height="25"/>
+                                        <rect key="frame" x="4.3333333333333144" y="4.3333333333333712" width="35" height="35"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="25" id="ou5-dP-Ktv"/>
-                                            <constraint firstAttribute="width" constant="25" id="pBV-9B-Bob"/>
+                                            <constraint firstAttribute="height" constant="35" id="ou5-dP-Ktv"/>
+                                            <constraint firstAttribute="width" constant="35" id="pBV-9B-Bob"/>
                                         </constraints>
                                         <color key="tintColor" red="0.32660728503184711" green="0.32660728503184711" blue="0.32660728503184711" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
                                         <state key="normal" image="near_me"/>
                                         <connections>
                                             <action selector="findMyCurrentLocationWasTapped:" destination="KxL-Oz-lun" eventType="touchUpInside" id="5mn-1p-BYR"/>
@@ -652,7 +654,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="imY-PR-JBT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3021.739130434783" y="1511.413043478261"/>
+            <point key="canvasLocation" x="2802" y="1680"/>
         </scene>
         <!--Add URL View Controller-->
         <scene sceneID="fZF-sj-BbO">

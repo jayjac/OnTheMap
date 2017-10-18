@@ -42,8 +42,24 @@ class AddURLViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        view.alpha = 0.0
         mapStringLabel.text = mapString
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
         urlTextField.becomeFirstResponder()
+        super.viewDidAppear(animated)
+        UIView.animate(withDuration: 0.5) {
+            self.view.alpha = 1.0
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        UIView.animate(withDuration: 0.5) { 
+            self.view.alpha = 0.0
+        }
     }
     
     deinit {
@@ -51,7 +67,8 @@ class AddURLViewController: UIViewController {
     }
     
     @objc private func fadeout() {
-        self.dismiss(animated: true, completion: nil)
+        urlTextField.resignFirstResponder()
+        self.dismiss(animated: false, completion: nil)
     }
     
     @objc private func locationWasAdded() {
@@ -101,8 +118,8 @@ class AddURLViewController: UIViewController {
     }
 
     @IBAction func cancelButtonWasTapped(_ sender: Any) {
-        urlTextField.resignFirstResponder()
-        dismiss(animated: true, completion: nil)
+        
+        fadeout()
     }
 
 

@@ -102,11 +102,10 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate {
     @objc private func locationWasTapped() {
         let addURLViewController = storyboard!.instantiateViewController(withIdentifier: "AddURLViewController") as! AddURLViewController
         
-        addURLViewController.modalPresentationStyle = .custom
-        addURLViewController.transitioningDelegate = fadeInDelegate
+        addURLViewController.modalPresentationStyle = .overFullScreen
         addURLViewController.coordinates = mapView.centerCoordinate
         addURLViewController.mapString = mapString
-        present(addURLViewController, animated: true, completion: nil)
+        present(addURLViewController, animated: false, completion: nil)
     }
 
 
@@ -121,12 +120,6 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate {
 
     }
 
-    
-
-    
-    
-
-    
 
     private func reverseGeocode(text: String) {
         mapCenterView.isHidden = true
