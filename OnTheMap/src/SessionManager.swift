@@ -59,8 +59,7 @@ class SessionManager {
         }
         
         guard let jsonData = data else { return }
-        let request = NSMutableURLRequest(url: UdacityAPI.sessionURL)
-        NetworkRequestFactory.setupJSONRequest(request, ofType: .post)
+        var request = NetworkRequestFactory.udacityServerRequest(with: UdacityAPI.sessionURL, of: .post)
         request.httpBody = jsonData
         let task = NetworkRequestFactory.urlSessionWithTimeout().dataTask(with: request as URLRequest) { (data: Data?, response: URLResponse?, error: Error?) in
             GUI.removeOverlaySpinner()
@@ -117,17 +116,10 @@ class SessionManager {
         
         let task = NetworkRequestFactory.urlSessionWithTimeout(10.0).dataTask(with: request) { data, response, error in
             GUI.removeOverlaySpinner()
-            /*if error != nil { // Handle error…
-                DispatchQueue.main.async {
-                    NotificationCenter.default.post(name: .logOut, object: nil)
-                }
-                return
-            }*/
             self.loginSuccess = nil
             DispatchQueue.main.async {
                 NotificationCenter.default.post(name: .logOut, object: nil)
-            }
-            
+            } 
         }
         task.resume()
     }

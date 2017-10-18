@@ -15,12 +15,13 @@ class MainTabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        LocationManager.default.retrieveStudentLocations()
-        LocationManager.default.retrieveMyLocations()
+
         guard let parent = parent else {
             fatalError("MainTabBarController should have a Controller parent")
         }
         GUI.initializeMainController(parent)
+        LocationManager.default.retrieveStudentLocations(force: true)
+        LocationManager.default.retrieveMyLocations()
         NotificationCenter.default.addObserver(self, selector: #selector(logOutNotification(_:)), name: .logOut, object: nil)
     }
     
@@ -31,7 +32,7 @@ class MainTabBarController: UITabBarController {
     
     @objc private func logOutNotification(_ notification: Notification) {
         guard let parent = parent else {
-            fatalError("MainTabBarController should have a Controller parent")
+            fatalError("MainTabBarController should have a (Navigation) Controller parent")
         }
         parent.dismiss(animated: true) { 
             GUI.deinitMainController()

@@ -26,7 +26,7 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var clippingView: UIView!
     @IBOutlet weak var goBackButton: UIView!
     private let fadeInDelegate = FadeInTransitioningDelegate()
-    private var mapString: String?
+    var mapString: String?
     private var timer: Timer?
     @IBOutlet weak var locationAddedLabel: UILabel!
     
@@ -37,7 +37,7 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate {
         
         locationAddedLabel.alpha = 0.0
         mapView.delegate = self
-        mapView.showsPointsOfInterest = true
+        mapView.showsPointsOfInterest = false //true
         mapCenterView.isHidden = true
         
         clippingView.clipsToBounds = true
@@ -189,9 +189,16 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let location = locations[0]
+        LocationManager.default.reverseGeocodeLocation(location) { (placemarks: [CLPlacemark]?, error: Error?) in
+            if let placemarks = placemarks {
+                let placemark = placemarks[0]
+                self.mapString = placemark.locality
+            }
+        }
         mapView.setCenter(location.coordinate, animated: true)
         mapCenterView.isHidden = false
         locationManager.stopUpdatingLocation()
+
     }
 
 

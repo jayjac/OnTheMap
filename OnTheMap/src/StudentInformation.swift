@@ -11,10 +11,7 @@ import CoreLocation
 import MapKit
 
 
-/*protocol StudentLocationDelegate {
-    func studentLocation(didRetrieveLocations locations: [StudentLocation])
-    func studentLocation(failedToRetrieveLocations error: NSError)
-}*/
+
 
 
 struct StudentInformation {

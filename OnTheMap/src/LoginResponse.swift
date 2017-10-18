@@ -21,7 +21,7 @@ struct LoginError {
     let message: String
 }
 
-fileprivate let archiveKey = "loginCredentials"
+/*fileprivate let archiveKey = "loginCredentials"
 fileprivate let loginSuccessKey = "loginSuccess"
 
 class LoginCredentials: NSObject, NSCoding {
@@ -57,4 +57,4 @@ class LoginCredentials: NSObject, NSCoding {
     }
 
     
-}
+}*/

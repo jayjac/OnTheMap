@@ -30,13 +30,7 @@ class NetworkRequestFactory {
     
     private init() {}
     
-    static func JSONRequest(for url: URL, ofType method: HTTPMethod) -> URLRequest {
-        var request = URLRequest(url: url)
-        request.httpMethod = method.rawValue.uppercased()
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        return request
-    }
+
     
     static func urlSessionWithTimeout(_ timeout: TimeInterval = 8.0) -> URLSession {
         let urlSessionConfig = URLSessionConfiguration.default
@@ -45,10 +39,16 @@ class NetworkRequestFactory {
         return urlSession
     }
     
-    static func setupJSONRequest(_ request: NSMutableURLRequest, ofType method: HTTPMethod = .get) {
-        request.httpMethod = method.rawValue.uppercased()
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+    
+    static func udacityServerRequest(with url: URL, of type: HTTPMethod = .get, isJSON: Bool = true) -> URLRequest {
+        var request = URLRequest(url: url)
+        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
+        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
+        if isJSON {
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        }
+        request.httpMethod = type.rawValue.uppercased()
+        return request
     }
 
     

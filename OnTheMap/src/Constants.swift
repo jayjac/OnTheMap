@@ -50,4 +50,5 @@ extension Notification.Name {
     static let loadingMyLocationsFailed = Notification.Name("loadingMyLocationsFailed")
     
     static let removedMyLocation = Notification.Name("removedMyLocation")
+    static let removedMyLocationFailed = Notification.Name("removedMyLocationFailed")
 }

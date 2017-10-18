@@ -36,7 +36,6 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
-        //print("deselected annotation")
         guard let studentAnnotationView = view as? StudentAnnotationView else { return }
         studentAnnotationView.animateAnnotation(to: .normal)
     }
