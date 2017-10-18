@@ -46,6 +46,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
     
     @IBAction func logInWasTapped() {
+        
         usernameTextField.resignFirstResponder()
         passwordTextField.resignFirstResponder()
         guard let username = usernameTextField.text, let password = passwordTextField.text, !username.isEmpty, !password.isEmpty else {
@@ -53,7 +54,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             GUI.showSimpleAlert(on: self, from: payload, withExtra: nil)
             return
         }
-        GUI.showOverlaySpinner(on: self.view)
+        GUI.showOverlaySpinnerOn(viewController: self)
         SessionManager.default.login(with: .regular, notify: self, credentials: username, password)
     }
     
@@ -70,7 +71,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         loginManager.logIn([.email], viewController: self) { (result: LoginResult) in
             switch result {
             case .success(_, _, let token):
-                GUI.showOverlaySpinner(on: self.view)
+                GUI.showOverlaySpinnerOn(viewController: self)
                 SessionManager.default.login(with: .facebook, notify: self, credentials: token.authenticationToken)
                 
             case .cancelled:

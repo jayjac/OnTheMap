@@ -31,7 +31,6 @@ class LoginCredentials: NSObject, NSCoding {
 
     
     override private init() {
-
         super.init()
     }
 

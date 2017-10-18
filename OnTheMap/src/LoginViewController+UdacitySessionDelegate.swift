@@ -16,12 +16,11 @@ extension LoginViewController: UdacitySessionDelegate {
     func sessionReturnedError(_ error: LoginError?) {
         GUI.removeOverlaySpinner()
         guard let error = error else { return }
+        
         let title = "Error \(error.status)"
         let message = error.message
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
-        alert.addAction(action)
-        present(alert, animated: true, completion: nil)
+        let payload = AlertPayload(title: title, message: message)
+        GUI.showSimpleAlert(on: self, from: payload, withExtra: nil)
     }
     
     func sessionWasAccepted() {
@@ -32,8 +31,5 @@ extension LoginViewController: UdacitySessionDelegate {
         
         let mainNavigationController = storyboard.instantiateViewController(withIdentifier: "MainNavigationController")
         present(mainNavigationController, animated: true, completion: nil)
-        //RetrieveUserInfoViewController
-        /*let vc = storyboard.instantiateViewController(withIdentifier: "RetrieveUserInfoViewController")
-        present(vc, animated: true, completion: nil)*/
     }
 }

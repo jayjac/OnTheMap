@@ -31,6 +31,7 @@ class SettingsViewController: UIViewController {
     }
     
     @objc private func rowWasDeleted(notification: Notification) {
+        GUI.removeOverlaySpinner()
         guard let index = notification.object as? Int else {
             fatalError("Notification object should be an Int in SettingsViewController")
         }
@@ -39,10 +40,12 @@ class SettingsViewController: UIViewController {
     }
     
     @objc private func myLocationWasAdded() {
+        GUI.removeOverlaySpinner()
         tableView.reloadData()
     }
     
     @objc private func myLocationsLoadingFailed(notification: Notification) {
+        GUI.removeOverlaySpinner()
         guard let error = notification.object as? Error else {
             fatalError("Notification object should be an error in SettingsViewController")
         }
@@ -83,6 +86,7 @@ extension SettingsViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         let index = indexPath.row - 1
+        GUI.showOverlaySpinnerOverMainController()
         LocationManager.default.deleteLocation(at: index)
     }
     

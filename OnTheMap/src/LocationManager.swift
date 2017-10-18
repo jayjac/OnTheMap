@@ -120,8 +120,8 @@ class LocationManager {
                 return
             }
             
-            let message = String.init(data: data!, encoding: String.Encoding.utf8)
-            print(message ?? "no message")
+            /*let message = String.init(data: data!, encoding: String.Encoding.utf8)
+            print(message ?? "no message")*/
             DispatchQueue.main.async {
                 NotificationCenter.default.post(name: .addingLocationSuccess, object: nil)
             }

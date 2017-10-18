@@ -80,13 +80,10 @@ class MaterialSpinner: UIView, CAAnimationDelegate {
         subLayer.fillColor = UIColor.clear.cgColor
         subLayer.lineWidth = self.lineWidth
         adaptCircleToCurrentOffset()
-        if !isInteractive {
-            //animate()
-            //constantRotation()
-        }
     }
     
     func startSpinning() {
+        resetCircle()
         animate()
         constantRotation()
     }
@@ -123,38 +120,7 @@ class MaterialSpinner: UIView, CAAnimationDelegate {
         currentStrokeColorIndex %= strokeColors.count
     }
     
-    // MARK:- Interactive loading icon (for pull-to-refresh situations)
-    /*func setInteractiveExtension(percent: CGFloat) {
-        subLayer.removeAllAnimations()
-        if percent == 0.0 {
-            resetCircle()
-        }
-        
-        let percentage = percent > 1.0 ? 1.0 : percent
-        subLayer.opacity = Float(percentage + 0.1)
-        CATransaction.begin()
-        CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
-        subLayer.strokeEnd = percentage * CGFloat(totalNumberOfCircleDivisions - 1) / CGFloat(totalNumberOfCircleDivisions)
-        CATransaction.commit()
-    }
-    
-    
-    
-    
-    func startAnimationAfterInteractiveGesture() {
-        shouldStopAllAnimations = false
-        let animation = CABasicAnimation(keyPath: "strokeStart")
-        animation.toValue = CGFloat(totalNumberOfCircleDivisions - 2) / CGFloat(totalNumberOfCircleDivisions)
-        animation.duration = stretchingDuration
-        animation.isRemovedOnCompletion = false
-        animation.fillMode = kCAFillModeBoth
-        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-        animation.beginTime = CACurrentMediaTime()
-        animation.delegate = self
-        subLayer.add(animation, forKey: "initialRetracting")
-        constantRotation()
-    }
-    */
+
     
     private func animate() {
         

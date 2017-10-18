@@ -40,6 +40,9 @@
 		E9BB82A81F94BFA700655E28 /* MyLocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BB82A71F94BFA700655E28 /* MyLocationTableViewCell.swift */; };
 		E9BB82AA1F94C9C900655E28 /* MyLocations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BB82A91F94C9C900655E28 /* MyLocations.swift */; };
 		E9BB82AD1F951A2B00655E28 /* AddLocationViewController+Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BB82AC1F951A2B00655E28 /* AddLocationViewController+Delegate.swift */; };
+		E9BB82AF1F96AECF00655E28 /* pop_drip.wav in Resources */ = {isa = PBXBuildFile; fileRef = E9BB82AE1F96AECF00655E28 /* pop_drip.wav */; };
+		E9BB82B41F96AF5300655E28 /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BB82B31F96AF5300655E28 /* SoundPlayer.swift */; };
+		E9BB82B61F97549D00655E28 /* LoadingSpinnerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BB82B51F97549D00655E28 /* LoadingSpinnerViewController.swift */; };
 		E9C77A061F4C53BC00A9BDA3 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C77A051F4C53BC00A9BDA3 /* Constants.swift */; };
 		E9C77A081F4CD54800A9BDA3 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C77A071F4CD54800A9BDA3 /* MapViewController.swift */; };
 		E9C77A0A1F4F811B00A9BDA3 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9C77A091F4F811B00A9BDA3 /* MapKit.framework */; };
@@ -111,6 +114,9 @@
 		E9BB82A71F94BFA700655E28 /* MyLocationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyLocationTableViewCell.swift; path = src/MyLocationTableViewCell.swift; sourceTree = "<group>"; };
 		E9BB82A91F94C9C900655E28 /* MyLocations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyLocations.swift; path = src/MyLocations.swift; sourceTree = "<group>"; };
 		E9BB82AC1F951A2B00655E28 /* AddLocationViewController+Delegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "AddLocationViewController+Delegate.swift"; path = "src/AddLocationViewController+Delegate.swift"; sourceTree = "<group>"; };
+		E9BB82AE1F96AECF00655E28 /* pop_drip.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = pop_drip.wav; path = sounds/pop_drip.wav; sourceTree = "<group>"; };
+		E9BB82B31F96AF5300655E28 /* SoundPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SoundPlayer.swift; path = src/SoundPlayer.swift; sourceTree = "<group>"; };
+		E9BB82B51F97549D00655E28 /* LoadingSpinnerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadingSpinnerViewController.swift; path = src/LoadingSpinnerViewController.swift; sourceTree = "<group>"; };
 		E9C77A051F4C53BC00A9BDA3 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = src/Constants.swift; sourceTree = "<group>"; };
 		E9C77A071F4CD54800A9BDA3 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MapViewController.swift; path = src/MapViewController.swift; sourceTree = "<group>"; };
 		E9C77A091F4F811B00A9BDA3 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -194,19 +200,20 @@
 		E94C15591F337A420076BCD6 /* OnTheMap */ = {
 			isa = PBXGroup;
 			children = (
+				E94C158B1F347A850076BCD6 /* Storyboards */,
+				E9BB82B01F96AED300655E28 /* Sounds */,
 				E94C15881F347A680076BCD6 /* OnTheMap-Bridging-Header.h */,
 				E94C15891F347A680076BCD6 /* AppDelegate.swift */,
 				E900A4031F561D45001CB05C /* NetworkRequestFactory.swift */,
 				E9C77A051F4C53BC00A9BDA3 /* Constants.swift */,
 				E9BB82A91F94C9C900655E28 /* MyLocations.swift */,
 				E9A5AE4B1F804990009972D5 /* MainTabBarController.swift */,
-				E94C158B1F347A850076BCD6 /* Storyboards */,
 				E9BB82AB1F94D64F00655E28 /* User Interface */,
 				E9A5AE481F7EFCF3009972D5 /* Locations */,
 				E95E57761F73048000DC7C8F /* Login */,
+				E9BB82A21F94B04400655E28 /* Settings */,
 				E94C15661F337A420076BCD6 /* Info.plist */,
 				E94C15611F337A420076BCD6 /* Assets.xcassets */,
-				E9BB82A21F94B04400655E28 /* Settings */,
 			);
 			path = OnTheMap;
 			sourceTree = "<group>";
@@ -280,6 +287,7 @@
 			children = (
 				E9BB82A01F93FB0B00655E28 /* GUI.swift */,
 				E9BB829C1F929C1D00655E28 /* FadeInAnimator.swift */,
+				E9BB82B51F97549D00655E28 /* LoadingSpinnerViewController.swift */,
 				E9BB82961F915EFC00655E28 /* MaterialSpinner.swift */,
 				E9BB82981F92694D00655E28 /* MaterialActivityIndicatorOverlay.swift */,
 				E9BB81B91F89413D00655E28 /* MapCenterView.swift */,
@@ -287,6 +295,15 @@
 				E9A5B1041F852E64009972D5 /* StudentAnnotationView.xib */,
 			);
 			name = "User Interface";
+			sourceTree = "<group>";
+		};
+		E9BB82B01F96AED300655E28 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				E9BB82AE1F96AECF00655E28 /* pop_drip.wav */,
+				E9BB82B31F96AF5300655E28 /* SoundPlayer.swift */,
+			);
+			name = Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -415,6 +432,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E94C15651F337A420076BCD6 /* LaunchScreen.storyboard in Resources */,
+				E9BB82AF1F96AECF00655E28 /* pop_drip.wav in Resources */,
 				E94C15621F337A420076BCD6 /* Assets.xcassets in Resources */,
 				E94C15601F337A420076BCD6 /* Main.storyboard in Resources */,
 				E9A5B1061F852E64009972D5 /* StudentAnnotationView.xib in Resources */,
@@ -602,6 +620,8 @@
 				E9BB82A11F93FB0B00655E28 /* GUI.swift in Sources */,
 				E900A4041F561D45001CB05C /* NetworkRequestFactory.swift in Sources */,
 				E9C77A081F4CD54800A9BDA3 /* MapViewController.swift in Sources */,
+				E9BB82B41F96AF5300655E28 /* SoundPlayer.swift in Sources */,
+				E9BB82B61F97549D00655E28 /* LoadingSpinnerViewController.swift in Sources */,
 				E9A5AE431F79CA0C009972D5 /* LocationListViewController.swift in Sources */,
 				E9A5AE471F7A68EA009972D5 /* SessionManager.swift in Sources */,
 				E9BB82891F8CAD2500655E28 /* StudentInformation.swift in Sources */,

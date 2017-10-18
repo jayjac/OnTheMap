@@ -11,7 +11,7 @@ import MapKit
 import CoreLocation
 
 
-class AddLocationViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate {
+class AddLocationViewController: UIViewController, CLLocationManagerDelegate {
     
     @IBOutlet weak var locationTextField: UITextField!
     @IBOutlet weak var mapView: MKMapView!
@@ -20,7 +20,7 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate, MK
     @IBOutlet weak var currentLocationButton: UIView!
     @IBOutlet weak var floatingButtonLowerConstraint: NSLayoutConstraint!
     @IBOutlet weak var searchBox: UIView!
-    private var isMapFullyRendered = false
+    var isMapFullyRendered = false
     @IBOutlet weak var leftArrowButtonLeftConstraint: NSLayoutConstraint!
     @IBOutlet weak var leftArrowButton: UIButton!
     @IBOutlet weak var clippingView: UIView!
@@ -28,14 +28,18 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate, MK
     private let fadeInDelegate = FadeInTransitioningDelegate()
     private var mapString: String?
     private var timer: Timer?
+    @IBOutlet weak var locationAddedLabel: UILabel!
     
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        locationAddedLabel.alpha = 0.0
         mapView.delegate = self
         mapView.showsPointsOfInterest = true
         mapCenterView.isHidden = true
+        
         clippingView.clipsToBounds = true
         leftArrowButtonLeftConstraint.constant = -20.0
         floatingButtonLowerConstraint.constant = -160.0
@@ -46,12 +50,22 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate, MK
         setupShadow(on: currentLocationButton)
         setupShadow(on: goBackButton)
         setupShadow(on: searchBox)
-        
-        guard let navController = navigationController else { return }
-        navController.isNavigationBarHidden = true
+        setupShadow(on: locationAddedLabel)
     }
     
+
     
+    func myLocationWasAdded() {
+        mapCenterView.isHidden = true
+        UIView.animate(withDuration: 0.5, animations: {
+            self.locationAddedLabel.alpha = 1.0
+        }) { _ in
+            SoundPlayer.beep()
+            UIView.animateKeyframes(withDuration: 0.5, delay: 3.0, options: [], animations: {
+                self.locationAddedLabel.alpha = 0.0
+            }, completion: nil)
+        }
+    }
 
     
     func animateTextFieldArrow(slideIn: Bool) {
@@ -96,7 +110,7 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate, MK
     }
 
 
-    private func animateFloatingButton() {
+    func animateFloatingButton() {
         if isMapFullyRendered {
             self.floatingButtonLowerConstraint.constant = 60
             let delay = 0.8
@@ -108,20 +122,10 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate, MK
     }
 
     
-    /*private func fadeInMapCenterView() {
-        UIView.animate(withDuration: 0.8, delay: 0.5, options: [.curveEaseOut], animations: {
-            self.mapCenterView.alpha = 1.0
-        }, completion: nil)
-    }*/
-    
 
     
     
-    func mapViewDidFinishRenderingMap(_ mapView: MKMapView, fullyRendered: Bool) {
-        isMapFullyRendered = true
-        animateFloatingButton()
-        //fadeInMapCenterView()
-    }
+
     
 
     private func reverseGeocode(text: String) {
@@ -145,7 +149,6 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate, MK
                     self.mapView.setRegion(region, animated: true)
                     self.mapCenterView.isHidden = false
                 }
-                
             }
         }
     }
@@ -156,7 +159,7 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate, MK
             GUI.showSimpleAlert(on: self, from: payload, withExtra: nil)
             return
         }
-        GUI.showOverlaySpinner(on: self.view)
+        GUI.showOverlaySpinnerOn(viewController: self)
         reverseGeocode(text: text)
         timeOutTimerAfter()
     }
@@ -194,7 +197,7 @@ class AddLocationViewController: UIViewController, CLLocationManagerDelegate, MK
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let location = locations[0]
         mapView.setCenter(location.coordinate, animated: true)
-        //mapView.showsUserLocation = true
+        mapCenterView.isHidden = false
         locationManager.stopUpdatingLocation()
     }
 

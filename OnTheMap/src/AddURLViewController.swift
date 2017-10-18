@@ -57,6 +57,8 @@ class AddURLViewController: UIViewController {
     @objc private func locationWasAdded() {
         GUI.removeOverlaySpinner()
         fadeout()
+        guard let presenting = presentingViewController as? AddLocationViewController else { return }
+        presenting.myLocationWasAdded()
     }
     
     
@@ -94,7 +96,7 @@ class AddURLViewController: UIViewController {
             GUI.showSimpleAlert(on: self, from: payload, withExtra: nil)
             return
         }
-        GUI.showOverlaySpinner(on: self.view)
+        GUI.showOverlaySpinnerOn(viewController: self)
         LocationManager.default.addLocation(with: url, coordinates: coordinates, mapString: self.mapString)
     }
 

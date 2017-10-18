@@ -22,7 +22,9 @@ struct GUI {
     
     private static var overlay: MaterialActivityIndicatorOverlay?
     private static var mainController: UIViewController?
+    private static var loadingSpinner: LoadingSpinnerViewController?
     
+
     
     
     static func initializeMainController(_ controller: UIViewController) {
@@ -34,10 +36,7 @@ struct GUI {
     }
     
     
-    static func showOverlaySpinnerOverMainController() {
-        guard let controller = mainController else { return }
-        showOverlaySpinner(on: controller.view)
-    }
+
     
     /**
      Displays an alert view controller with a 'OK' cancel button
@@ -61,7 +60,7 @@ struct GUI {
     }
     
     
-    static func showOverlaySpinner(on view: UIView, with colors: [UIColor] = [UIColor.white, UIColor.green, UIColor.orange, UIColor.red]) {
+    /*static func showOverlaySpinner(on view: UIView, with colors: [UIColor] = [UIColor.white, UIColor.green, UIColor.orange, UIColor.red]) {
         DispatchQueue.main.async {
             overlay?.removeFromSuperview()
             let activityIndicatorOverlay = MaterialActivityIndicatorOverlay(strokeColors: colors)
@@ -72,12 +71,29 @@ struct GUI {
             overlay = activityIndicatorOverlay
         }
 
+    }*/
+    
+    
+    static func showOverlaySpinnerOverMainController() {
+        guard let controller = mainController else { return }
+        showOverlaySpinnerOn(viewController: controller)
+    }
+    
+    static func showOverlaySpinnerOn(viewController: UIViewController) {
+        DispatchQueue.main.async {
+            loadingSpinner = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LoadingSpinnerViewController") as? LoadingSpinnerViewController
+            loadingSpinner?.setStrokeColors([UIColor.white, UIColor.green, UIColor.orange, UIColor.red])
+            loadingSpinner?.modalPresentationStyle = .overFullScreen
+            viewController.present(loadingSpinner!, animated: false, completion: nil)
+        }
     }
     
     static func removeOverlaySpinner() {
         DispatchQueue.main.async {
-            overlay?.removeFromSuperview()
-            overlay = nil
+            loadingSpinner?.dismiss(animated: false, completion: nil)
+            loadingSpinner = nil
+            /*overlay?.removeFromSuperview()
+            overlay = nil*/
         }
 
     }

@@ -63,6 +63,7 @@ class SessionManager {
         NetworkRequestFactory.setupJSONRequest(request, ofType: .post)
         request.httpBody = jsonData
         let task = NetworkRequestFactory.urlSessionWithTimeout().dataTask(with: request as URLRequest) { (data: Data?, response: URLResponse?, error: Error?) in
+            GUI.removeOverlaySpinner()
             if let error = error as NSError? {
                 let loginError = LoginError(status: error.code, message: error.localizedDescription)
                 DispatchQueue.main.async {
@@ -115,9 +116,13 @@ class SessionManager {
         }
         
         let task = NetworkRequestFactory.urlSessionWithTimeout(10.0).dataTask(with: request) { data, response, error in
-            if error != nil { // Handle error…
+            GUI.removeOverlaySpinner()
+            /*if error != nil { // Handle error…
+                DispatchQueue.main.async {
+                    NotificationCenter.default.post(name: .logOut, object: nil)
+                }
                 return
-            }
+            }*/
             self.loginSuccess = nil
             DispatchQueue.main.async {
                 NotificationCenter.default.post(name: .logOut, object: nil)

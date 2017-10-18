@@ -12,10 +12,14 @@ class MaterialActivityIndicatorOverlay: UIView {
     
     private var materialSpinner: MaterialSpinner?
     private var colors: [UIColor]
+    private var xConstraint: NSLayoutConstraint!
+    private var yConstraint: NSLayoutConstraint!
     
     convenience init() {
         self.init(strokeColors: [UIColor.blue])
     }
+    
+
     
     init(strokeColors: [UIColor]) {
         colors = strokeColors
@@ -33,14 +37,39 @@ class MaterialActivityIndicatorOverlay: UIView {
     
     private func setup() {
         backgroundColor = UIColor(white: 0.0, alpha: 0.6)
+
+    }
+
+    
+    func centerSpinner() {
+       /* guard let superView = superview, let materialSpinner = materialSpinner else { return }
+        let leftConstraint = NSLayoutConstraint(item: self, attribute: .left, relatedBy: .equal, toItem: superView, attribute: .left, multiplier: 1.0, constant: 0.0)
+        let rightConstraint = NSLayoutConstraint(item: self, attribute: .right, relatedBy: .equal, toItem: superView, attribute: .right, multiplier: 1.0, constant: 0.0)
+        let topConstraint = NSLayoutConstraint(item: self, attribute: .top, relatedBy: .equal, toItem: superView, attribute: .top, multiplier: 1.0, constant: 0.0)
+        let bottomConstraint = NSLayoutConstraint(item: self, attribute: .bottom, relatedBy: .equal, toItem: superView, attribute: .bottom, multiplier: 1.0, constant: 0.0)
+        //self.removeConstraints(self.constraints)
+        superView.addConstraints([leftConstraint, rightConstraint, topConstraint, bottomConstraint])
+        let centerXConstraint = NSLayoutConstraint(item: materialSpinner, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1.0, constant: 0.0)
+        let centerYConstraint = NSLayoutConstraint(item: materialSpinner, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1.0, constant: 0.0)
+        //materialSpinner.removeConstraints(materialSpinner.constraints)
+       // self.addConstraints([centerXConstraint, centerYConstraint])*/
     }
     
     func startSpinning() {
         materialSpinner?.removeFromSuperview()
         materialSpinner = MaterialSpinner(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: 30, height: 30)), strokeColors: colors)
         addSubview(materialSpinner!)
-        materialSpinner!.center = center
-        materialSpinner!.startSpinning()
+        centerSpinner()
+        guard let superView = superview, let materialSpinner = materialSpinner else { return }
+        let leftConstraint = NSLayoutConstraint(item: self, attribute: .left, relatedBy: .equal, toItem: superView, attribute: .left, multiplier: 1.0, constant: 0.0)
+        let rightConstraint = NSLayoutConstraint(item: self, attribute: .right, relatedBy: .equal, toItem: superView, attribute: .right, multiplier: 1.0, constant: 0.0)
+        let topConstraint = NSLayoutConstraint(item: self, attribute: .top, relatedBy: .equal, toItem: superView, attribute: .top, multiplier: 1.0, constant: 0.0)
+        let bottomConstraint = NSLayoutConstraint(item: self, attribute: .bottom, relatedBy: .equal, toItem: superView, attribute: .bottom, multiplier: 1.0, constant: 0.0)
+        //self.removeConstraints(self.constraints)
+        superView.addConstraints([leftConstraint, rightConstraint, topConstraint, bottomConstraint])
+        materialSpinner.startSpinning()
     }
+    
+
 
 }
