@@ -31,7 +31,7 @@ class LocationListViewController: UIViewController {
 extension LocationListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return LocationManager.default.studentLocationAnnotations.count
+        return StudentLocationAnnotation.annotationsArray.count
     }
     
     
@@ -39,7 +39,7 @@ extension LocationListViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as? LocationListCell else {
             fatalError("Could not dequeue the correct cell for the LocationList view")
         }
-        let studentInformation = LocationManager.default.studentLocationAnnotations[indexPath.row].studentInformation
+        let studentInformation = StudentLocationAnnotation.annotationsArray[indexPath.row].studentInformation
         cell.setup(with: studentInformation)
 
         return cell
@@ -52,7 +52,7 @@ extension LocationListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let studentInfo = LocationManager.default.studentLocationAnnotations[indexPath.row].studentInformation
+        let studentInfo = StudentLocationAnnotation.annotationsArray[indexPath.row].studentInformation
         studentInfo.openMediaURL()
     }
 }

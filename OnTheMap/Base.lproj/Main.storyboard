@@ -706,18 +706,19 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ONq-7s-Z2m">
-                                        <rect key="frame" x="221" y="63" width="36" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ONq-7s-Z2m">
+                                        <rect key="frame" x="182" y="63" width="36" height="30"/>
                                         <state key="normal" title="Send"/>
                                         <connections>
                                             <action selector="addLocationButtonWasTapped:" destination="KxL-Oz-lun" eventType="touchUpInside" id="7BM-EF-zTQ"/>
                                             <action selector="sendURLButtonWasTapped:" destination="Udn-aQ-4ZB" eventType="touchUpInside" id="Otc-ma-FY0"/>
                                         </connections>
                                     </button>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Provide a website URL" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="K0N-RM-ASi">
-                                        <rect key="frame" x="20" y="63" width="190" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Provide a website URL" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="K0N-RM-ASi">
+                                        <rect key="frame" x="20" y="63" width="144" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="144" id="prc-he-0CM"/>
+                                        </constraints>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL"/>
@@ -733,9 +734,8 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uS6-U8-u9t">
-                                        <rect key="frame" x="282" y="63" width="48" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uS6-U8-u9t">
+                                        <rect key="frame" x="233" y="63" width="48" height="30"/>
                                         <state key="normal" title="Cancel">
                                             <color key="titleColor" red="0.86135077476501465" green="0.0057518600966073724" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         </state>
@@ -748,6 +748,12 @@
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="128" id="5VU-zq-VPK"/>
+                                    <constraint firstItem="ONq-7s-Z2m" firstAttribute="leading" secondItem="K0N-RM-ASi" secondAttribute="trailing" constant="18" id="DUN-Hs-KuQ"/>
+                                    <constraint firstItem="uS6-U8-u9t" firstAttribute="centerY" secondItem="ONq-7s-Z2m" secondAttribute="centerY" id="NDe-fS-ezS"/>
+                                    <constraint firstItem="K0N-RM-ASi" firstAttribute="leading" secondItem="DdI-8O-VmB" secondAttribute="leading" constant="20" id="beH-2E-kam"/>
+                                    <constraint firstAttribute="bottom" secondItem="K0N-RM-ASi" secondAttribute="bottom" constant="35" id="jK1-Tn-dL1"/>
+                                    <constraint firstItem="uS6-U8-u9t" firstAttribute="leading" secondItem="ONq-7s-Z2m" secondAttribute="trailing" constant="15" id="yjC-3N-20D"/>
+                                    <constraint firstItem="ONq-7s-Z2m" firstAttribute="centerY" secondItem="K0N-RM-ASi" secondAttribute="centerY" id="zKq-nW-S3f"/>
                                 </constraints>
                             </view>
                         </subviews>

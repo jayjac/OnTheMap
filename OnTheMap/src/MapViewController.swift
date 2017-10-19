@@ -38,13 +38,16 @@ class MapViewController: UIViewController {
         let center = NotificationCenter.default
         center.addObserver(self, selector: #selector(loadingURLError(notification:)), name: .loadingURLErrorNotification, object: nil)
         center.addObserver(self, selector: #selector(studentLocationsWereLoaded), name: .studentLocationsWereLoaded, object: nil)
-        center.addObserver(self, selector: #selector(studentLocationsLoadingFailed), name: .studentLocationsLoadingFailed, object: nil)
+        center.addObserver(self, selector: #selector(studentLocationsLoadingFailed(notification:)), name: .studentLocationsLoadingFailed, object: nil)
     }
     
 
     
-    @objc private func studentLocationsLoadingFailed() {
-        let payload = AlertPayload(title: "Failed", message: "Could not retrieve student locations")
+    @objc private func studentLocationsLoadingFailed(notification: Notification) {
+        guard let error = notification.object as? LoadingError else {
+            fatalError("Notification object should be a LoadingError struct")
+        }
+        let payload = AlertPayload(title: "Failed", message: "Could not load student locations [\(error.localizedDescription)]")
         GUI.showSimpleAlert(on: self, from: payload, withExtra: nil)
     }
     
@@ -59,7 +62,7 @@ class MapViewController: UIViewController {
         GUI.removeOverlaySpinner()
         let annotations = mapView.annotations
         mapView.removeAnnotations(annotations)
-        mapView.addAnnotations(LocationManager.default.studentLocationAnnotations)
+        mapView.addAnnotations(StudentLocationAnnotation.annotationsArray)
     }
     
     deinit {
@@ -69,10 +72,10 @@ class MapViewController: UIViewController {
 
     
     
-    func studentLocation(failedToRetrieveLocations error: NSError) {
+    /*func studentLocation(failedToRetrieveLocations error: NSError) {
         let payload = AlertPayload(title: "Error", message: error.localizedDescription)
         GUI.showSimpleAlert(on: self, from: payload, withExtra: nil)
-    }
+    }*/
     
 
 }

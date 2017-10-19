@@ -20,9 +20,13 @@ class MainTabBarController: UITabBarController {
             fatalError("MainTabBarController should have a Controller parent")
         }
         GUI.initializeMainController(parent)
+        NotificationCenter.default.addObserver(self, selector: #selector(logOutNotification(_:)), name: .logOut, object: nil)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         LocationManager.default.retrieveStudentLocations(force: true)
         LocationManager.default.retrieveMyLocations()
-        NotificationCenter.default.addObserver(self, selector: #selector(logOutNotification(_:)), name: .logOut, object: nil)
     }
     
     deinit {

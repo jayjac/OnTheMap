@@ -8,11 +8,43 @@
 
 import Foundation
 import CoreLocation
+import MapKit
+
+
+
+class StudentLocationAnnotation: NSObject, MKAnnotation {
+    
+    let studentInformation: StudentInformation
+    private(set) var hasPinAlreadyBeenDropped = false
+    fileprivate(set) static var annotationsArray = [StudentLocationAnnotation]()
+    
+    init(studentInformation: StudentInformation) {
+        self.studentInformation = studentInformation
+        super.init()
+    }
+    
+    var coordinate: CLLocationCoordinate2D {
+        return studentInformation.coordinate
+    }
+    
+    func setPinDropped() {
+        hasPinAlreadyBeenDropped = true
+    }
+}
+
+struct LoadingError: Error {
+    
+    let description: String
+    
+    var localizedDescription: String {
+        return description
+    }
+}
+
 
 class LocationManager {
     
     private var lastRefresh: Date?
-    private(set) var studentLocationAnnotations = [StudentLocationAnnotation]()
     private(set) var myLocations = [MyLocation]()
     private lazy var reverseGeocoder = CLGeocoder()
     
@@ -20,8 +52,6 @@ class LocationManager {
 
     
     static let `default` = LocationManager()
-    
-    
 
     
     /** 
@@ -37,10 +67,16 @@ class LocationManager {
         
         let url = NetworkRequestFactory.last100StudentLocationsURL()
         let request = NetworkRequestFactory.udacityServerRequest(with: url, of: .get, isJSON: false)
-        let task = NetworkRequestFactory.urlSessionWithTimeout().dataTask(with: request as URLRequest) { data, response, error in
+        
+        // wrong credentials for testing purposes
+        /*var request = URLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
+        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye", forHTTPHeaderField: "X-Parse-Application-Id") // wrong appId on purpose
+        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")*/
+        
+        let task = NetworkRequestFactory.urlSessionWithTimeout().dataTask(with: request) { data, response, error in
             GUI.removeOverlaySpinner()
-            if let error = error {
-                NotificationCenter.default.post(name: .studentLocationsLoadingFailed, object: error)
+            if let responseError = NetworkRequestFactory.getErrorFromResponse(error: error, response: response) {
+                NotificationCenter.default.post(name: .studentLocationsLoadingFailed, object: responseError)
                 return
             }
             guard let results = NetworkRequestFactory.retrieveJSONResponse(from: data, with: "results") else { return }
@@ -51,7 +87,7 @@ class LocationManager {
                 let annotation = StudentLocationAnnotation(studentInformation: studentInformation)
                 studentLocationAnnotations.append(annotation)
             }
-            self.studentLocationAnnotations = studentLocationAnnotations
+            StudentLocationAnnotation.annotationsArray = studentLocationAnnotations
             DispatchQueue.main.async {
                NotificationCenter.default.post(name: .studentLocationsWereLoaded, object: nil)
             }
@@ -88,6 +124,8 @@ class LocationManager {
         task.resume()
     }
     
+    
+    
     func addLocation(with url: String, coordinates: CLLocationCoordinate2D, mapString: String?) {
         
         guard let key = SessionManager.default.loginSuccess?.key else { return }
@@ -118,34 +156,28 @@ class LocationManager {
         task.resume()
     }
     
+    
+    
     func deleteLocation(at index: Int) {
         let locationId = myLocations[index].objectId
-
-        let urlString = "https://parse.udacity.com/parse/classes/StudentLocation/\(locationId)"
-        let url = URL(string: urlString)!
-        let request = NetworkRequestFactory.udacityServerRequest(with: url, of: .delete, isJSON: true) /*URLRequest(url: url!)
-        request.httpMethod = "DELETE"
-        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
-        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")*/
+        let url = UdacityAPI.studentLocationURL(with: locationId)
+        let request = NetworkRequestFactory.udacityServerRequest(with: url, of: .delete, isJSON: true)
 
         let task = NetworkRequestFactory.urlSessionWithTimeout().dataTask(with: request) { data, response, error in
-            if let error = error { // Handle error…
+            if let responseError = NetworkRequestFactory.getErrorFromResponse(error: error, response: response) {
                 DispatchQueue.main.async {
-                    NotificationCenter.default.post(name: .removedMyLocationFailed, object: error)
+                    NotificationCenter.default.post(name: .removedMyLocationFailed, object: responseError)
                 }
                 return
             }
-            print("deleted object at index \(index)")
+            //print("deleted object at index \(index)")
             self.myLocations.remove(at: index)
             //print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)
             DispatchQueue.main.async {
                 NotificationCenter.default.post(name: .removedMyLocation, object: index)
             }
-            
         }
         task.resume()
-        
     }
     
     func reverseGeocode(text: String, completionHandler: @escaping CLGeocodeCompletionHandler) {

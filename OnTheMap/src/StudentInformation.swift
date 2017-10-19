@@ -61,21 +61,3 @@ struct StudentInformation {
 
 
 
-class StudentLocationAnnotation: NSObject, MKAnnotation {
-    
-    let studentInformation: StudentInformation
-    private(set) var hasPinAlreadyBeenDropped = false
-    
-    init(studentInformation: StudentInformation) {
-        self.studentInformation = studentInformation
-        super.init()
-    }
-
-    var coordinate: CLLocationCoordinate2D {
-        return studentInformation.coordinate
-    }
-    
-    func setPinDropped() {
-        hasPinAlreadyBeenDropped = true
-    }
-}

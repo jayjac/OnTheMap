@@ -134,7 +134,8 @@ class SessionManager {
         let request = URLRequest(url: UdacityAPI.userInformationURL(id: id))
 
         let task = NetworkRequestFactory.urlSessionWithTimeout().dataTask(with: request) { data, response, error in
-            if error != nil { // Handle error...
+            if NetworkRequestFactory.getErrorFromResponse(error: error, response: response) != nil {
+                print("could not retrieve my user info")
                 return
             }
             guard let newData = NetworkRequestFactory.skipOverFiveCharacters(of: data),

@@ -33,6 +33,12 @@ struct UdacityAPI {
         let url = URL(string: "https://www.udacity.com/api/users/\(id)")!
         return url
     }
+    
+    static func studentLocationURL(with locationId: String) -> URL {
+        let urlString = "https://parse.udacity.com/parse/classes/StudentLocation/\(locationId)"
+        let url = URL(string: urlString)!
+        return url
+    }
 }
 
 

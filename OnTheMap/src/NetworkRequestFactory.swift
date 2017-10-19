@@ -128,6 +128,17 @@ class NetworkRequestFactory {
     }
     
 
+    static func getErrorFromResponse(error: Error?, response: URLResponse?) -> Error? {
+        if let error = error {
+            return error
+        }
+        if let response = response as? HTTPURLResponse, response.statusCode != 200 {
+            let message = HTTPURLResponse.localizedString(forStatusCode: response.statusCode)
+            let loadingError = LoadingError(description: message)
+            return loadingError
+        }
+        return nil
+    }
     
 
     
