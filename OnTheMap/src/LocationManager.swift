@@ -16,7 +16,11 @@ class StudentLocationAnnotation: NSObject, MKAnnotation {
     
     let studentInformation: StudentInformation
     private(set) var hasPinAlreadyBeenDropped = false
+    
+    // Containes annotations for the last 100 locations uploaded by all students
     fileprivate(set) static var annotationsArray = [StudentLocationAnnotation]()
+    
+
     
     init(studentInformation: StudentInformation) {
         self.studentInformation = studentInformation
@@ -45,6 +49,11 @@ struct LoadingError: Error {
 class LocationManager {
     
     private var lastRefresh: Date?
+    
+    /* This model is for the third 'SettingsViewController' screen where I show ALL the locations I added.
+     This array is not a subarray of the StudentLocationAnnotation.annotationsArray above.
+     I need this model for the table view controller's data source. */
+    fileprivate(set) static var myLocationsArray = [MyLocation]()
     private(set) var myLocations = [MyLocation]()
     private lazy var reverseGeocoder = CLGeocoder()
     
@@ -127,7 +136,6 @@ class LocationManager {
     
     
     func addLocation(with url: String, coordinates: CLLocationCoordinate2D, mapString: String?) {
-        
         guard let key = SessionManager.default.loginSuccess?.key else { return }
         let myIdentity = SessionManager.default.identity
         let firstName = myIdentity?.firstName ?? ""
@@ -159,7 +167,7 @@ class LocationManager {
     
     
     func deleteLocation(at index: Int) {
-        let locationId = myLocations[index].objectId
+        let locationId = LocationManager.default.myLocations[index].objectId
         let url = UdacityAPI.studentLocationURL(with: locationId)
         let request = NetworkRequestFactory.udacityServerRequest(with: url, of: .delete, isJSON: true)
 
@@ -171,7 +179,7 @@ class LocationManager {
                 return
             }
             //print("deleted object at index \(index)")
-            self.myLocations.remove(at: index)
+            LocationManager.default.myLocations.remove(at: index)
             //print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)
             DispatchQueue.main.async {
                 NotificationCenter.default.post(name: .removedMyLocation, object: index)
